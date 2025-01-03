@@ -1,4 +1,6 @@
 {
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "circuits", "inputs", "build"],
   "compilerOptions": {
     "target": "ES2020",
     "module": "commonjs",
