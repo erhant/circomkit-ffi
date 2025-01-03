@@ -1,0 +1,28 @@
+[package]
+name = "circomkit-ffi"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+rand = "0.8.5"
+
+# lambdaworks
+lambdaworks-math = "0.11.0"
+lambdaworks-circom-adapter = { git = "https://github.com/lambdaclass/lambdaworks" }
+lambdaworks-groth16 = { git = "https://github.com/lambdaclass/lambdaworks" }
+
+# arkworks
+ark-circom = { git = "https://github.com/arkworks-rs/circom-compat" }
+ark-std = { version = "0.4.0", default-features = false, features = [
+    "parallel",
+] }
+ark-bn254 = { version = "0.4.0" }
+ark-groth16 = { version = "0.4.0", default-features = false, features = [
+    "parallel",
+] }
+eyre = "0.6.12"
+serde = "1.0.217"
+num-bigint = "0.4.6"
