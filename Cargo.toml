@@ -7,8 +7,6 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-rand = "0.8.5"
-
 # lambdaworks
 lambdaworks-math = "0.11.0"
 lambdaworks-circom-adapter = { git = "https://github.com/lambdaclass/lambdaworks" }
@@ -16,6 +14,14 @@ lambdaworks-groth16 = { git = "https://github.com/lambdaclass/lambdaworks" }
 
 # arkworks
 ark-circom = { git = "https://github.com/arkworks-rs/circom-compat" }
+ark-crypto-primitives = { version = "0.4.0" }
+ark-ec = { version = "0.4.2", default-features = false, features = [
+    "parallel",
+] }
+ark-ff = { version = "0.4.2", default-features = false, features = [
+    "parallel",
+    "asm",
+] }
 ark-std = { version = "0.4.0", default-features = false, features = [
     "parallel",
 ] }
@@ -23,6 +29,15 @@ ark-bn254 = { version = "0.4.0" }
 ark-groth16 = { version = "0.4.0", default-features = false, features = [
     "parallel",
 ] }
+ark-poly = { version = "0.4.2", default-features = false, features = [
+    "parallel",
+] }
+ark-relations = { version = "0.4.0", default-features = false }
+ark-serialize = { version = "0.4.2", default-features = false }
+
+# utils
+rand = "0.8.5"
 eyre = "0.6.12"
 serde = "1.0.217"
 num-bigint = "0.4.6"
+serde_json = "1.0.134"

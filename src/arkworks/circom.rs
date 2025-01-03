@@ -3,14 +3,13 @@ use ark_circom::{read_zkey, CircomBuilder, CircomCircuit, CircomConfig, CircomRe
 use ark_groth16::{Groth16, Proof, ProvingKey};
 use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystem, SynthesisError};
 use ark_std::rand::thread_rng;
-use color_eyre::Result;
-use num_bigint::BigUint;
+use eyre::{Context, Result};
 use serde::Serialize;
 use std::{fs::File, io::BufReader};
 
 /// Loads Circom files from an existing WASM and R1CS.
-pub fn load_circom_config(wasm_path: &str, r1cs_path: &str) -> Result<CircomConfig<Bn254>> {
-    CircomConfig::<Bn254>::new(wasm_path, r1cs_path)
+pub fn load_circom_config(wasm_path: &str, r1cs_path: &str) -> Result<CircomConfig<Fr>> {
+    CircomConfig::<Fr>::new(wasm_path, r1cs_path)
 }
 
 /// Loads proving key (which can generate verification key too) from an existing `zKey` file.
@@ -23,7 +22,7 @@ pub fn load_prover_key(pkey_path: &str) -> Result<ProvingKey<Bn254>> {
 }
 
 /// Asserts all constraints to pass.
-pub fn check_constraints(circuit: CircomCircuit<Bn254>) -> Result<(), SynthesisError> {
+pub fn check_constraints(circuit: CircomCircuit<Fr>) -> Result<(), SynthesisError> {
     let cs = ConstraintSystem::<Fr>::new_ref();
 
     circuit.generate_constraints(cs.clone())?;
@@ -37,7 +36,7 @@ pub fn check_constraints(circuit: CircomCircuit<Bn254>) -> Result<(), SynthesisE
 /// that is tested to be working correctly.
 ///
 /// https://github.com/arkworks-rs/circom-compat/issues/35 see this for a related issue
-pub fn setup_circuit(builder: CircomBuilder<Bn254>) -> Result<ProvingKey<Bn254>, SynthesisError> {
+pub fn setup_circuit(builder: CircomBuilder<Fr>) -> Result<ProvingKey<Bn254>, SynthesisError> {
     let mut rng = thread_rng();
 
     Groth16::<Bn254, CircomReduction>::generate_random_parameters_with_reduction(
@@ -48,7 +47,7 @@ pub fn setup_circuit(builder: CircomBuilder<Bn254>) -> Result<ProvingKey<Bn254>,
 
 /// Creates a proof from a circuit with public inputs fed into.
 pub fn prove_circuit(
-    circuit: CircomCircuit<Bn254>,
+    circuit: CircomCircuit<Fr>,
     pkey: &ProvingKey<Bn254>,
 ) -> Result<Proof<Bn254>, SynthesisError> {
     let mut rng = thread_rng();
@@ -64,7 +63,7 @@ struct SnarkjsProof {
 }
 
 /// Exports proof as a JSON object.
-pub fn export_proof(proof: &Proof<Bn254>) -> Result<String, serde_json::Error> {
+pub fn export_proof(proof: &Proof<Bn254>) -> eyre::Result<String> {
     let obj = SnarkjsProof {
         pi_a: [proof.a.x.to_string(), proof.a.y.to_string()],
         pi_b: [
@@ -75,7 +74,7 @@ pub fn export_proof(proof: &Proof<Bn254>) -> Result<String, serde_json::Error> {
         protocol: "groth16".to_string(),
     };
 
-    serde_json::to_string(&obj)
+    serde_json::to_string(&obj).wrap_err("could not serialize proof")
 }
 
 /// Exports public signals as a JSON array of string bigints.
