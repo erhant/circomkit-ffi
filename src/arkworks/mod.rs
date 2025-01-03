@@ -7,6 +7,8 @@ use ark_std::rand::thread_rng;
 use eyre::Result;
 use std::{fs::File, io::BufReader, path::Path};
 
+mod proof;
+
 /// Loads Circom files from an existing WASM and R1CS.
 pub fn load_circom_config<F: PrimeField>(
     wasm_path: impl AsRef<Path>,
@@ -112,3 +114,10 @@ pub fn prove(
 }
 
 // TODO: test multiplier_3 circuit
+
+/// Exports public signals as a JSON array of string bigints.
+pub fn export_public_signals<F: PrimeField>(pubs: &Vec<F>) -> Result<String, serde_json::Error> {
+    let signal_strings = pubs.iter().map(|s| s.to_string()).collect::<Vec<String>>();
+
+    serde_json::to_string(&signal_strings)
+}

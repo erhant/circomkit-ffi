@@ -1,6 +1,8 @@
 use lambdaworks_circom_adapter::circom_to_lambda;
 use lambdaworks_groth16::*;
 
+// TODO: add proof `From` for snarkjs proof
+
 #[cfg(test)]
 mod tests {
     use std::fs;
