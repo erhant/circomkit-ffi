@@ -1,5 +1,5 @@
 /// A proof object, similar to how SnarkJS exports it.
-#[derive(serde::Serialize)]
+#[derive(Debug, serde::Serialize, serde::Deserialize)]
 pub struct SnarkjsProof {
     pub pi_a: [String; 2],
     pub pi_b: [[String; 2]; 2],
