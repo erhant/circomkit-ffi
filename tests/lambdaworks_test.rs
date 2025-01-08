@@ -2,7 +2,7 @@ use circomkit_ffi::lambdaworks::*;
 use std::fs;
 
 #[test]
-fn test_multiplier_3() {
+fn test_lambda_multiplier_3() {
     let r1cs_path = "tests/res/mul3.r1cs.json";
     let wtns_path = "tests/res/mul3.wtns.json";
 

@@ -1,4 +1,7 @@
 pub use lambdaworks_circom_adapter::circom_to_lambda;
 pub use lambdaworks_groth16::*;
 
-// TODO: add proof `From` for snarkjs proof
+// IMPORTANT:
+//
+// - Circom witness ordering: `["1", ..outputs, ...inputs, ...other_signals]`
+// - Lambda witness ordering: `["1", ...inputs, ..outputs, ...other_signals]`
