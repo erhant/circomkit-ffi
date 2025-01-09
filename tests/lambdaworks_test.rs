@@ -1,4 +1,4 @@
-use circomkit_ffi::lambdaworks::*;
+use circomkit_ffi::{lambdaworks::*, SnarkjsProof};
 use std::fs;
 
 #[test]
@@ -15,6 +15,9 @@ fn test_lambda_multiplier_3() {
 
     let proof = Prover::prove(&wtns, &qap, &proving_key);
     let public_inputs = &wtns[..qap.num_of_public_inputs];
+
+    let snarkjs_proof = SnarkjsProof::from(&proof);
+    println!("{:#?}", snarkjs_proof);
 
     let accept = verify(&verifying_key, &proof, public_inputs);
     assert!(accept, "proof is not accepted");

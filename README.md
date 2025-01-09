@@ -1,6 +1,6 @@
 # Circomkit FFI
 
-> This project is kindly supported by [Soulforge zkBankai](https://soulforge.zkbankai.com/) grant, with the application [here](./docs/GRANT.md). The grant is given for 2 months with 1 milestone at the end of per month, the project is expected to be finished within that duration.
+> This project is kindly supported by [Soulforge zkBankai](https://soulforge.zkbankai.com/) grant, with the application [here](./GRANT.md). The grant is given for 2 months with 1 milestone at the end of per month, the project is expected to be finished within that duration.
 
 This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI:
 

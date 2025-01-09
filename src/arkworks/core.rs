@@ -8,6 +8,7 @@ use eyre::Result;
 use std::{fs::File, io::BufReader, path::Path};
 
 /// Loads Circom files from an existing WASM and R1CS.
+#[inline]
 pub fn load_circom_config<F: PrimeField>(
     wasm_path: impl AsRef<Path>,
     r1cs_path: impl AsRef<Path>,
@@ -16,6 +17,7 @@ pub fn load_circom_config<F: PrimeField>(
 }
 
 /// Loads proving key (which can generate verification key too) from an existing `zKey` file.
+#[inline]
 pub fn load_prover_key(pkey_path: impl AsRef<Path>) -> Result<ProvingKey<Bn254>> {
     let f = File::open(pkey_path)?;
     let mut reader = BufReader::new(f);
@@ -111,11 +113,4 @@ pub fn prove(
     let proof = prove_circuit(circom, &prover_key)?;
 
     Ok((proof, pubs))
-}
-
-/// Exports public signals as a JSON array of string bigints.
-pub fn export_public_signals<F: PrimeField>(pubs: &Vec<F>) -> Result<String, serde_json::Error> {
-    let signal_strings = pubs.iter().map(|s| s.to_string()).collect::<Vec<String>>();
-
-    serde_json::to_string(&signal_strings)
 }

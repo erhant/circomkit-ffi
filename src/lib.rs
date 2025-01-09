@@ -4,4 +4,6 @@ pub mod lambdaworks;
 mod traits;
 
 mod snarkjs;
-pub use snarkjs::SnarkjsProof;
+pub use snarkjs::*;
+
+

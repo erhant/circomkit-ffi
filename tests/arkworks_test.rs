@@ -1,5 +1,6 @@
 use circomkit_ffi::arkworks::*;
 use circomkit_ffi::SnarkjsProof;
+use circomkit_ffi::SnarkjsPublicSignals;
 
 /// While there is no await within the test, it still requires Tokio runtime due to
 /// internals of Arkworks.
@@ -13,15 +14,15 @@ async fn test_arkworks_multiplier_3() {
     let inputs = vec![("in", 1), ("in", 2), ("in", 3)];
     let (proof, public_signals) = prove(wasm_path, r1cs_path, pkey_path, inputs).unwrap();
 
-    println!("{:#?}", proof);
+    let snarkjs_proof = SnarkjsProof::from(&proof);
     println!(
-        "{:#?}",
-        public_signals
-            .iter()
-            .map(|s| s.to_string())
-            .collect::<Vec<String>>()
+        "Proof: {}",
+        serde_json::to_string_pretty(&snarkjs_proof).unwrap()
     );
 
-    let snarkjs_proof = SnarkjsProof::from_arkworks(&proof);
-    println!("{:#?}", snarkjs_proof);
+    let snarkjs_public_signals = SnarkjsPublicSignals::from(&public_signals);
+    println!(
+        "Public Signals: {}",
+        serde_json::to_string_pretty(&snarkjs_public_signals).unwrap()
+    );
 }
