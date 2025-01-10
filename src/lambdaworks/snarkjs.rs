@@ -1,4 +1,9 @@
-use crate::SnarkjsProof;
+use lambdaworks_math::field::{
+    element::FieldElement,
+    traits::{IsField, IsPrimeField},
+};
+
+use crate::{SnarkjsProof, SnarkjsPublicSignals};
 
 type LambdaworksProof = lambdaworks_groth16::Proof;
 
@@ -27,5 +32,28 @@ impl From<&LambdaworksProof> for SnarkjsProof {
 impl From<LambdaworksProof> for SnarkjsProof {
     fn from(proof: LambdaworksProof) -> Self {
         Self::from(&proof)
+    }
+}
+
+// type LambdaworksSignal = FieldElement<MontgomeryBackendPrimeField<FrConfig, 4>>;
+
+impl SnarkjsPublicSignals {
+    pub fn from_lambdaworks_slice<F: IsPrimeField>(public_signals: &[FieldElement<F>]) -> Self {
+        Self(
+            public_signals
+                .iter()
+                .map(|s| s.representative().to_string())
+                .collect(),
+        )
+    }
+
+    pub fn from_lambdaworks_vec_ref<F: IsPrimeField>(
+        public_signals: &Vec<FieldElement<F>>,
+    ) -> Self {
+        Self::from_lambdaworks_slice(public_signals.as_slice())
+    }
+
+    pub fn from_lambdaworks_vec<F: IsPrimeField>(public_signals: Vec<FieldElement<F>>) -> Self {
+        Self::from_lambdaworks_slice(public_signals.as_slice())
     }
 }

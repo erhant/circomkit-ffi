@@ -564,7 +564,7 @@ dependencies = [
  "eyre",
  "lambdaworks-circom-adapter",
  "lambdaworks-groth16",
- "lambdaworks-math 0.11.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "lambdaworks-math",
  "num-bigint",
  "rand",
  "serde",
@@ -1995,7 +1995,7 @@ version = "0.11.0"
 source = "git+https://github.com/lambdaclass/lambdaworks#2ce8b2ea2dd6547848b63db2246912b06066dd1b"
 dependencies = [
  "lambdaworks-groth16",
- "lambdaworks-math 0.11.0 (git+https://github.com/lambdaclass/lambdaworks)",
+ "lambdaworks-math",
  "serde",
  "serde_json",
 ]
@@ -2005,7 +2005,7 @@ name = "lambdaworks-crypto"
 version = "0.11.0"
 source = "git+https://github.com/lambdaclass/lambdaworks#2ce8b2ea2dd6547848b63db2246912b06066dd1b"
 dependencies = [
- "lambdaworks-math 0.11.0 (git+https://github.com/lambdaclass/lambdaworks)",
+ "lambdaworks-math",
  "sha2",
  "sha3",
 ]
@@ -2016,20 +2016,9 @@ version = "0.11.0"
 source = "git+https://github.com/lambdaclass/lambdaworks#2ce8b2ea2dd6547848b63db2246912b06066dd1b"
 dependencies = [
  "lambdaworks-crypto",
- "lambdaworks-math 0.11.0 (git+https://github.com/lambdaclass/lambdaworks)",
+ "lambdaworks-math",
  "rand",
  "rand_chacha",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "lambdaworks-math"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "708d148956bcdc21ae5c432b4e20bbaa26fd68d5376a3a6c461f41095abea0ba"
-dependencies = [
- "rayon",
  "serde",
  "serde_json",
 ]

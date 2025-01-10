@@ -8,7 +8,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # lambdaworks
-lambdaworks-math = "0.11.0"
+lambdaworks-math = { git = "https://github.com/lambdaclass/lambdaworks" }
 lambdaworks-circom-adapter = { git = "https://github.com/lambdaclass/lambdaworks" }
 lambdaworks-groth16 = { git = "https://github.com/lambdaclass/lambdaworks" }
 
@@ -39,9 +39,9 @@ ark-serialize = { version = "0.4.2", default-features = false }
 rand = "0.8.5"
 eyre = "0.6.12"
 serde = "1.0.217"
+serde_json = "1.0.134"
 num-bigint = "0.4.6"
 
 
 [dev-dependencies]
 tokio = { version = "1", features = ["macros", "rt-multi-thread", "signal"] }
-serde_json = "1.0.134"
