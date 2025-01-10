@@ -108,6 +108,7 @@ pub fn compute_witness<F: PrimeField>(
 /// Asserts all constraints to pass.
 ///
 /// Returns `true` if all constraints are satisfied for the built circuit.
+#[inline]
 pub fn verify_constraints<F: PrimeField>(
     circuit: CircomCircuit<F>,
 ) -> Result<bool, SynthesisError> {
@@ -121,28 +122,31 @@ pub fn verify_constraints<F: PrimeField>(
 /// that is tested to be working correctly.
 ///
 /// https://github.com/arkworks-rs/circom-compat/issues/35 see this for a related issue
+#[inline(always)]
 pub fn setup_circom_bn254_circuit(
     builder: CircomBuilder<Fr>,
 ) -> Result<ProvingKey<Bn254>, SynthesisError> {
-    let mut rng = thread_rng();
-
     Groth16::<Bn254, CircomReduction>::generate_random_parameters_with_reduction(
         builder.setup(),
-        &mut rng,
+        &mut thread_rng(),
     )
 }
 
 /// Creates a proof from a circuit with public inputs fed into.
+#[inline(always)]
 pub fn prove_circuit(
     circuit: CircomCircuit<Fr>,
     pkey: &ProvingKey<Bn254>,
 ) -> Result<Proof<Bn254>, SynthesisError> {
-    let mut rng = thread_rng();
-    Groth16::<Bn254, CircomReduction>::create_random_proof_with_reduction(circuit, pkey, &mut rng)
+    Groth16::<Bn254, CircomReduction>::create_random_proof_with_reduction(
+        circuit,
+        pkey,
+        &mut thread_rng(),
+    )
 }
 
 /// Verifies a proof with public inputs.
-#[inline]
+#[inline(always)]
 pub fn verify(
     proof: &Proof<Bn254>,
     public_inputs: &[Fr],

@@ -562,6 +562,7 @@ dependencies = [
  "ark-serialize",
  "ark-std",
  "eyre",
+ "hex",
  "lambdaworks-circom-adapter",
  "lambdaworks-groth16",
  "lambdaworks-math",

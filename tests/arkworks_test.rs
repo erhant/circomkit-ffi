@@ -16,12 +16,12 @@ async fn test_arkworks_multiplier_3() -> eyre::Result<()> {
     // you can push same input few times, if its an array
     let inputs = vec![("in", 2), ("in", 4), ("in", 10)];
 
-    let config = load_circom_config(wasm_path, r1cs_path)?;
+    let config = load_circom_config(r1cs_path, wasm_path)?;
     let prover_key = load_prover_key(pkey_path)?;
 
     let circom: CircomCircuit<ark_ff::Fp<ark_ff::MontBackend<ark_bn254::FrConfig, 4>, 4>> =
         compute_witness::<Fr>(config, inputs)?;
-    println!("Witness computed: {:#?}", circom.witness);
+    // println!("Witness computed: {:#?}", circom.witness);
     let public_signals = circom.get_public_inputs().ok_or(eyre::eyre!(
         "could not get public inputs, is witness computed?"
     ))?;
@@ -33,7 +33,7 @@ async fn test_arkworks_multiplier_3() -> eyre::Result<()> {
         serde_json::to_string_pretty(&snarkjs_proof).unwrap()
     );
 
-    let snarkjs_public_signals = SnarkjsPublicSignals::from_arkworks_vec(public_signals);
+    let snarkjs_public_signals = SnarkjsPublicSignals::from_arkworks(public_signals);
     println!(
         "Public Signals: {}",
         serde_json::to_string_pretty(&snarkjs_public_signals).unwrap()
@@ -66,7 +66,7 @@ async fn test_arkworks_multiplier_3_witness() -> eyre::Result<()> {
         serde_json::to_string_pretty(&snarkjs_proof).unwrap()
     );
 
-    let snarkjs_public_signals = SnarkjsPublicSignals::from_arkworks_vec(public_signals);
+    let snarkjs_public_signals = SnarkjsPublicSignals::from_arkworks(public_signals);
     println!(
         "Public Signals: {}",
         serde_json::to_string_pretty(&snarkjs_public_signals).unwrap()

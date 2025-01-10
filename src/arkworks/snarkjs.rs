@@ -25,17 +25,13 @@ impl From<ArkworksProof> for SnarkjsProof {
 
 impl SnarkjsPublicSignals {
     #[inline]
-    pub fn from_arkworks_slice<F: ark_ff::PrimeField>(public_signals: &[F]) -> Self {
-        Self(public_signals.iter().map(|s| s.to_string()).collect())
-    }
-
-    #[inline]
-    pub fn from_arkworks_vec_ref<F: ark_ff::PrimeField>(public_signals: &Vec<F>) -> Self {
-        Self::from_arkworks_slice(public_signals.as_slice())
-    }
-
-    #[inline]
-    pub fn from_arkworks_vec<F: ark_ff::PrimeField>(public_signals: Vec<F>) -> Self {
-        Self::from_arkworks_slice(public_signals.as_slice())
+    pub fn from_arkworks<F: ark_ff::PrimeField>(public_signals: impl AsRef<[F]>) -> Self {
+        Self(
+            public_signals
+                .as_ref()
+                .iter()
+                .map(|s| s.to_string())
+                .collect(),
+        )
     }
 }
