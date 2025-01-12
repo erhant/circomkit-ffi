@@ -33,7 +33,7 @@ where
     let r1cs = R1CSFile::new(reader)?.into();
 
     let circom = CircomCircuit {
-        r1cs: r1cs,
+        r1cs,
         witness: Some(witness),
     };
 

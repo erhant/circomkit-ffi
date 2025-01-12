@@ -26,7 +26,7 @@ fn test_lambda_multiplier_3() {
     );
 
     let snarkjs_proof = SnarkjsProof::from(&proof);
-    // println!("{:#?}", snarkjs_proof);
+    println!("{:#?}", snarkjs_proof);
 
     let snarkjs_public_signals = SnarkjsPublicSignals::from_lambdaworks(public_inputs);
     println!("{:#?}", snarkjs_public_signals);
