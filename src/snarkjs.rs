@@ -17,3 +17,9 @@ pub struct SnarkjsProof {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SnarkjsPublicSignals(pub Vec<String>);
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SnarkjsOutput {
+    pub proof: SnarkjsProof,
+    pub public_signals: SnarkjsPublicSignals,
+}

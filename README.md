@@ -24,4 +24,11 @@ TODO:
 
 ## Acknowledgements
 
-This project is kindly supported by [Soulforge zkBankai](https://soulforge.zkbankai.com/) grant, with the application [here](https://github.com/zk-bankai/soulforge/blob/main/applications/circomkit-bunffi.md). The grant is given for 2 months with 1 milestone at the end of per month, the project is expected to be finished within that duration.
+This project is kindly supported by [Soulforge zkBankai](https://soulforge.zkbankai.com/) grant, with the application [here](https://github.com/zk-bankai/soulforge/blob/main/applications/circomkit-bunffi.md).
+
+Some helpful resources for this project on FFI usage were:
+
+- <https://jakegoulding.com/rust-ffi-omnibus/string_return/>
+- <https://jakegoulding.com/rust-ffi-omnibus/string_arguments/>
+- <https://bun.sh/docs/api/ffi>
+- <https://tokio.rs/tokio/topics/bridging>
