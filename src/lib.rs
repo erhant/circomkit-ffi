@@ -8,7 +8,9 @@ use std::ffi::{c_char, CStr, CString};
 
 pub use snarkjs::*;
 
-// TODO: !!!
+/// Given a string input, returns the same.
+/// 
+/// Can be used for testing.
 #[no_mangle]
 #[allow(improper_ctypes_definitions)]
 pub extern "C" fn echo(input: *const c_char) -> CString {
@@ -20,6 +22,7 @@ pub extern "C" fn echo(input: *const c_char) -> CString {
     CString::new(input).unwrap()
 }
 
+/// Generate an Arkworks proof.
 #[no_mangle]
 #[allow(improper_ctypes_definitions)]
 pub extern "C" fn arkworks_prove(

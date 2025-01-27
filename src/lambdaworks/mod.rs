@@ -6,6 +6,7 @@ pub use lambdaworks_groth16::*;
 use crate::{SnarkjsProof, SnarkjsPublicSignals};
 
 mod snarkjs;
+mod zkey;
 
 pub fn prove_with_witness(wtns_path: impl AsRef<Path>, r1cs_path: impl AsRef<Path>) {
     let (qap, wtns) = circom_to_lambda(
