@@ -58,3 +58,5 @@ jobs:
         with:
           executable-name: ubi
           target: ${{ matrix.target }}
+          # dont do any changelog
+          changes-file: ""
