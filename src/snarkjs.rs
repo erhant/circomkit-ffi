@@ -23,3 +23,28 @@ pub struct SnarkjsOutput {
     pub proof: SnarkjsProof,
     pub public_signals: SnarkjsPublicSignals,
 }
+
+/// Execute the following command.
+///
+/// ```sh
+/// snarkjs g16v [verification_key.json] [public.json] [proof.json]
+/// ```
+///
+/// If the process fails, this may panic.
+///
+/// Requires `snarkjs` to be installed globally.
+#[inline]
+pub fn snarkjs_verify_groth16(
+    verification_key_path: &str,
+    proof_path: &str,
+    public_signals_path: &str,
+) -> std::io::Result<std::process::Output> {
+    std::process::Command::new("snarkjs")
+        .args(&[
+            "g16v", // short for "groth16 verify"
+            verification_key_path,
+            proof_path,
+            public_signals_path,
+        ])
+        .output()
+}

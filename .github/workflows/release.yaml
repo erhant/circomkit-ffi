@@ -39,8 +39,13 @@ jobs:
               target: aarch64-unknown-linux-gnu,
               extension: "so",
             }
-
-            # more targets here ...
+          - {
+              runner: windows-latest,
+              osname: windows,
+              arch: amd64,
+              target: x86_64-pc-windows-msvc,
+              extension: "dll",
+            }
 
     name: Release - ${{ matrix.osname }}
 
@@ -63,5 +68,5 @@ jobs:
       - name: Upload Launch Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}
+          name: libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}.${{ matrix.extension }}
           path: libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
