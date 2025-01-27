@@ -53,10 +53,11 @@ jobs:
           args: "--locked --release"
           strip: true
 
-      - name: Publish artifacts and release
-        uses: houseabsolute/actions-rust-release@v0
+      - name: Prepare Release
+        run: mv target/${{ matrix.target }}/release/circomkitffi${{ matrix.extension }} ./circomkitffi-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
+
+      - name: Upload Launch Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          executable-name: ubi
-          target: ${{ matrix.target }}
-          # dont do any changelog
-          changes-file: ""
+          name: dkn-compute-binary-${{ matrix.osname }}-${{ matrix.arch }}
+          path: dkn-compute-binary-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}

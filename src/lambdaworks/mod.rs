@@ -6,7 +6,8 @@ pub use lambdaworks_groth16::*;
 use crate::{SnarkjsProof, SnarkjsPublicSignals};
 
 mod snarkjs;
-mod zkey;
+
+// mod zkey;
 
 pub fn prove_with_witness(wtns_path: impl AsRef<Path>, r1cs_path: impl AsRef<Path>) {
     let circom_r1cs = read_circom_r1cs(r1cs_path).unwrap();
