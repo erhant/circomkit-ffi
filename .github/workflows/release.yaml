@@ -16,24 +16,28 @@ jobs:
               osname: macOS,
               arch: amd64,
               target: x86_64-apple-darwin,
+              extension: "dylib",
             }
           - {
               runner: macos-latest,
               osname: macOS,
               arch: arm64,
               target: aarch64-apple-darwin,
+              extension: "dylib",
             }
           - {
               runner: ubuntu-latest,
               osname: linux,
               arch: amd64,
               target: x86_64-unknown-linux-gnu,
+              extension: "so",
             }
           - {
               runner: ubuntu-latest,
               osname: linux,
               arch: arm64,
               target: aarch64-unknown-linux-gnu,
+              extension: "so",
             }
 
             # more targets here ...
@@ -54,10 +58,10 @@ jobs:
           strip: true
 
       - name: Prepare Release
-        run: mv target/${{ matrix.target }}/release/libcircomkit_ffi.so ./libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
+        run: mv target/${{ matrix.target }}/release/libcircomkit_ffi.${{ matrix.extension }} ./libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
 
       - name: Upload Launch Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dkn-compute-binary-${{ matrix.osname }}-${{ matrix.arch }}
-          path: dkn-compute-binary-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
+          name: libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}
+          path: libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
