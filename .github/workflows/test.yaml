@@ -3,7 +3,12 @@ name: Rust Tests
 on:
   push:
     branches: ["main"]
-
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - ".github/workflows/test.yaml"
 env:
   CARGO_TERM_COLOR: always
 
