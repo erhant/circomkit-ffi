@@ -9,10 +9,11 @@ use std::ffi::{c_char, CStr, CString};
 pub use snarkjs::*;
 
 /// Given a string input, returns the same.
-/// 
+///
 /// Can be used for testing.
 #[no_mangle]
 #[allow(improper_ctypes_definitions)]
+#[allow(clippy::not_unsafe_ptr_arg_deref)]
 pub extern "C" fn echo(input: *const c_char) -> CString {
     let input_cstr = unsafe {
         assert!(!input.is_null());

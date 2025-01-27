@@ -80,7 +80,7 @@ where
     let f = File::open(wtns_path)?;
     let wtns: Vec<String> = serde_json::from_reader(BufReader::new(f))?;
 
-    Ok(wtns.iter().map(|s| F::from_str(&s).unwrap()).collect())
+    Ok(wtns.iter().map(|s| F::from_str(s).unwrap()).collect())
 }
 
 /// Creates a circuit by computing the witness from the given inputs.
@@ -154,7 +154,7 @@ pub fn verify(
 ) -> Result<bool, SynthesisError> {
     Groth16::<Bn254, CircomReduction>::verify_proof(
         &ark_groth16::prepare_verifying_key(&proving_key.vk),
-        &proof,
-        &public_inputs,
+        proof,
+        public_inputs,
     )
 }

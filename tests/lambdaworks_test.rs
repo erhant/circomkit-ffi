@@ -1,4 +1,4 @@
-use circomkit_ffi::{lambdaworks::*, snarkjs_verify_groth16, SnarkjsProof, SnarkjsPublicSignals};
+use circomkit_ffi::{lambdaworks::*, SnarkjsProof, SnarkjsPublicSignals};
 
 #[test]
 fn test_lambda_multiplier_3() -> eyre::Result<()> {

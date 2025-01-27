@@ -40,7 +40,7 @@ pub fn snarkjs_verify_groth16(
     public_signals_path: &str,
 ) -> std::io::Result<std::process::Output> {
     std::process::Command::new("snarkjs")
-        .args(&[
+        .args([
             "g16v", // short for "groth16 verify"
             verification_key_path,
             proof_path,
