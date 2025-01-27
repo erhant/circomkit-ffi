@@ -8,25 +8,39 @@ on:
 
 jobs:
   release:
-    name: Release - ${{ matrix.platform.os-name }}
     strategy:
       matrix:
-        platform:
-          - os-name: Linux-x86_64
-            runs-on: ubuntu-20.04
-            target: x86_64-unknown-linux-musl
+        include:
+          - {
+              runner: macos-latest,
+              osname: macOS,
+              arch: amd64,
+              target: x86_64-apple-darwin,
+            }
+          - {
+              runner: macos-latest,
+              osname: macOS,
+              arch: arm64,
+              target: aarch64-apple-darwin,
+            }
+          - {
+              runner: ubuntu-latest,
+              osname: linux,
+              arch: amd64,
+              target: x86_64-unknown-linux-gnu,
+            }
+          - {
+              runner: ubuntu-latest,
+              osname: linux,
+              arch: arm64,
+              target: aarch64-unknown-linux-gnu,
+            }
 
-          - os-name: Linux-aarch64
-            runs-on: ubuntu-20.04
-            target: aarch64-unknown-linux-musl
+            # more targets here ...
 
-          - os-name: macOS-x86_64
-            runs-on: macOS-latest
-            target: x86_64-apple-darwin
+    name: Release - ${{ matrix.osname }}
 
-          # more targets here ...
-
-    runs-on: ${{ matrix.platform.runs-on }}
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,7 +49,7 @@ jobs:
         uses: houseabsolute/actions-rust-cross@v1
         with:
           command: "build"
-          target: ${{ matrix.platform.target }}
+          target: ${{ matrix.target }}
           args: "--locked --release"
           strip: true
 
@@ -43,4 +57,4 @@ jobs:
         uses: houseabsolute/actions-rust-release@v0
         with:
           executable-name: ubi
-          target: ${{ matrix.platform.target }}
+          target: ${{ matrix.target }}

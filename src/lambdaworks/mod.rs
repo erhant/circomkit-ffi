@@ -9,7 +9,7 @@ mod snarkjs;
 mod zkey;
 
 pub fn prove_with_witness(wtns_path: impl AsRef<Path>, r1cs_path: impl AsRef<Path>) {
-    let (qap, wtns) = circom_to_lambda(
+    let (qap, wtns, pubs) = circom_to_lambda(
         &fs::read_to_string(r1cs_path).unwrap(),
         &fs::read_to_string(wtns_path).unwrap(),
     );

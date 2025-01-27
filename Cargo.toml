@@ -8,29 +8,29 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # lambdaworks
-lambdaworks-math = { git = "https://github.com/lambdaclass/lambdaworks" }
-lambdaworks-circom-adapter = { git = "https://github.com/lambdaclass/lambdaworks" }
-lambdaworks-groth16 = { git = "https://github.com/lambdaclass/lambdaworks" }
+lambdaworks-math = { git = "https://github.com/erhant/lambdaworks", branch = "erhant/fix-circom-adapter" }
+lambdaworks-circom-adapter = { git = "https://github.com/erhant/lambdaworks", branch = "erhant/fix-circom-adapter" }
+lambdaworks-groth16 = { git = "https://github.com/erhant/lambdaworks", branch = "erhant/fix-circom-adapter" }
 
 # arkworks
 ark-circom = { git = "https://github.com/arkworks-rs/circom-compat" }
 ark-crypto-primitives = { version = "0.4.0" }
 ark-ec = { version = "0.4.2", default-features = false, features = [
-    "parallel",
+  "parallel",
 ] }
 ark-ff = { version = "0.4.2", default-features = false, features = [
-    "parallel",
-    "asm",
+  "parallel",
+  "asm",
 ] }
 ark-std = { version = "0.4.0", default-features = false, features = [
-    "parallel",
+  "parallel",
 ] }
 ark-bn254 = { version = "0.4.0" }
 ark-groth16 = { version = "0.4.0", default-features = false, features = [
-    "parallel",
+  "parallel",
 ] }
 ark-poly = { version = "0.4.2", default-features = false, features = [
-    "parallel",
+  "parallel",
 ] }
 ark-relations = { version = "0.4.0", default-features = false }
 ark-serialize = { version = "0.4.2", default-features = false }
