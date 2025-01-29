@@ -3,11 +3,12 @@ name: "Release libraries"
 on:
   release:
     types: [published]
-  # TODO: remove manual dispatch
-  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  release:
+  build:
     strategy:
       matrix:
         include:
@@ -17,13 +18,16 @@ jobs:
               arch: amd64,
               target: x86_64-apple-darwin,
               extension: "dylib",
+              libname: "libcircomkit_ffi",
             }
+
           - {
               runner: macos-latest,
               osname: macOS,
               arch: arm64,
               target: aarch64-apple-darwin,
               extension: "dylib",
+              libname: "libcircomkit_ffi",
             }
           - {
               runner: ubuntu-latest,
@@ -31,6 +35,7 @@ jobs:
               arch: amd64,
               target: x86_64-unknown-linux-gnu,
               extension: "so",
+              libname: "libcircomkit_ffi",
             }
           - {
               runner: ubuntu-latest,
@@ -38,6 +43,7 @@ jobs:
               arch: arm64,
               target: aarch64-unknown-linux-gnu,
               extension: "so",
+              releasename: "libcircomkit_ffi",
             }
           - {
               runner: windows-latest,
@@ -45,6 +51,7 @@ jobs:
               arch: amd64,
               target: x86_64-pc-windows-msvc,
               extension: "dll",
+              libname: "circomkit_ffi",
             }
 
     name: Release - ${{ matrix.osname }}
@@ -63,10 +70,35 @@ jobs:
           strip: true
 
       - name: Prepare Release
-        run: mv target/${{ matrix.target }}/release/libcircomkit_ffi.${{ matrix.extension }} ./libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
+        run: mv target/${{ matrix.target }}/release/${{ matrix.releasename }}.${{ matrix.extension }} ./${{ matrix.releasename }}-${{ matrix.osname }}-${{ matrix.arch }}.${{ matrix.extension }}
 
       - name: Upload Launch Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}.${{ matrix.extension }}
-          path: libcircomkit_ffi-${{ matrix.osname }}-${{ matrix.arch }}${{ matrix.extension }}
+          name: ${{ matrix.releasename }}-${{ matrix.osname }}-${{ matrix.arch }}.${{ matrix.extension }}
+          path: ${{ matrix.releasename }}-${{ matrix.osname }}-${{ matrix.arch }}.${{ matrix.extension }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # fetches all tags and history, TODO: do better?
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: ./artifacts
+
+      - name: Create release with artifacts
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ github.event.release.name }}
+          tag: ${{ github.event.release.tag_name }}
+          artifacts: "artifacts/*"
+          artifactContentType: application/octet-stream
+          allowUpdates: true
