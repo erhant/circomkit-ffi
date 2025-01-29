@@ -2,7 +2,7 @@ import { dlopen, FFIType, suffix } from "bun:ffi";
 
 const path = `${
   import.meta.dirname
-}/../target/debug/libcircomkit_ffi.${suffix}`;
+}/../target/debug/libcircomkit_ffi.${suffix}`; // TODO: download these from github releases
 const lib = dlopen(path, {
   /** A diagnostic function, returns the given input back.
    *

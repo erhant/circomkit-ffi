@@ -1,10 +1,5 @@
-use ark_bn254::Fr;
-use ark_circom::CircomCircuit;
-
 use circomkit_ffi::arkworks::*;
-use circomkit_ffi::snarkjs_verify_groth16;
-use circomkit_ffi::SnarkjsProof;
-use circomkit_ffi::SnarkjsPublicSignals;
+use circomkit_ffi::snarkjs::*;
 
 /// While there is no await within the test, it still requires Tokio runtime due to
 /// internals of Arkworks.
@@ -12,7 +7,7 @@ use circomkit_ffi::SnarkjsPublicSignals;
 /// For this reason, we make use of Tokio Runtime within the code.
 #[test]
 fn test_arkworks_multiplier_3() -> eyre::Result<()> {
-    let inner = || -> eyre::Result<()> {
+    let inner_thread = || -> eyre::Result<()> {
         let wasm_path = "tests/res/mul3.wasm";
         let r1cs_path = "tests/res/mul3.r1cs";
         let pkey_path = "tests/res/mul3_groth16.zkey";
@@ -23,8 +18,7 @@ fn test_arkworks_multiplier_3() -> eyre::Result<()> {
         let config = load_circom_config(r1cs_path, wasm_path)?;
         let prover_key = load_prover_key(pkey_path)?;
 
-        let circom: CircomCircuit<ark_ff::Fp<ark_ff::MontBackend<ark_bn254::FrConfig, 4>, 4>> =
-            compute_witness::<Fr>(config, inputs)?;
+        let circom = compute_witness::<ark_bn254::Fr>(config, inputs)?;
         // println!("Witness computed: {:#?}", circom.witness);
         let public_signals = circom.get_public_inputs().ok_or(eyre::eyre!(
             "could not get public inputs, is witness computed?"
@@ -50,7 +44,7 @@ fn test_arkworks_multiplier_3() -> eyre::Result<()> {
         .enable_io()
         .build()
         .unwrap()
-        .block_on(async { inner() })
+        .block_on(async { inner_thread() })
 }
 
 /// While there is no await within the test, it still requires Tokio runtime due to

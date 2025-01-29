@@ -3,10 +3,8 @@ pub mod lambdaworks;
 
 mod traits;
 
-mod snarkjs;
+pub mod snarkjs;
 use std::ffi::{c_char, CStr, CString};
-
-pub use snarkjs::*;
 
 /// Given a string input, returns the same.
 ///
@@ -50,5 +48,6 @@ pub extern "C" fn arkworks_prove(
             arkworks::prove_with_witness_with_setup(r1cs_path, wtns_path, pkey_path)
         });
 
-    CString::new(serde_json::to_string_pretty(&snarkjs_out).unwrap()).unwrap()
+    let output = serde_json::to_string_pretty(&snarkjs_out).unwrap();
+    CString::new(output).unwrap()
 }

@@ -1,6 +1,6 @@
 use lambdaworks_math::field::{element::FieldElement, traits::IsPrimeField};
 
-use crate::{SnarkjsProof, SnarkjsPublicSignals};
+use crate::snarkjs::{SnarkjsProof, SnarkjsPublicSignals};
 
 type LambdaworksProof = lambdaworks_groth16::Proof;
 

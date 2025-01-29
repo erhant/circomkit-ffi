@@ -1,4 +1,4 @@
-use crate::{SnarkjsProof, SnarkjsPublicSignals};
+use crate::snarkjs::{SnarkjsProof, SnarkjsPublicSignals};
 
 type ArkworksProof = ark_groth16::Proof<ark_bn254::Bn254>;
 

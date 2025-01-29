@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use crate::{SnarkjsOutput, SnarkjsProof, SnarkjsPublicSignals};
+use crate::snarkjs::{SnarkjsOutput, SnarkjsProof, SnarkjsPublicSignals};
 
 mod snarkjs;
 

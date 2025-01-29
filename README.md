@@ -7,6 +7,8 @@ This repository contains an all-in-one adapter for several backends, mainly to b
   - [x] [Arkworks Circom Groth16 (BN254) Adapter](https://github.com/arkworks-rs/circom-compat)
 - [ ] Witness Calculators:
   - [ ] [Iden3 Circom Witnesscalc](https://github.com/iden3/circom-witnesscalc)
+  - [ ] [Witnesscalc Adapter](https://github.com/zkmopro/witnesscalc_adapter)
+  - [ ] [Rust-Witness](https://github.com/chancehudson/rust-witness)
 - [x] SnarkJS Compatiblity
   - [x] JSON proof export
   - [x] JSON public signal export

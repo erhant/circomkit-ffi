@@ -1,4 +1,5 @@
-use circomkit_ffi::{lambdaworks::*, SnarkjsProof, SnarkjsPublicSignals};
+use circomkit_ffi::lambdaworks::*;
+use circomkit_ffi::snarkjs::*;
 
 #[test]
 fn test_lambda_multiplier_3() -> eyre::Result<()> {
@@ -32,8 +33,10 @@ fn test_lambda_multiplier_3() -> eyre::Result<()> {
         serde_json::to_string_pretty(&snarkjs_public_signals).unwrap(),
     )?;
 
-    // FIXME: lambdaworks snarkjs does not verify
+    // FIXME: lambdaworks snarkjs does not verify correctly because it does its own setup
     // see: https://github.com/lambdaclass/lambdaworks/issues/958
+    // see: https://github.com/lambdaclass/lambdaworks/issues/965
+
     // let output = snarkjs_verify_groth16(
     //     "tests/res/mul3_groth16_vkey.json",
     //     "tests/res/lambdaworks_mul3_public.json",
