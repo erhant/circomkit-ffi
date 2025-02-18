@@ -1,17 +1,17 @@
 # Circomkit FFI
 
-This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. Its features:
+This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. It features:
 
-- [x] Provers:
-  - [x] [Lambdaworks Circom Groth16 (BLS12-381) Adapter](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter)
-  - [x] [Arkworks Circom Groth16 (BN254) Adapter](https://github.com/arkworks-rs/circom-compat)
-- [ ] Witness Calculators:
-  - [ ] [Iden3 Circom Witnesscalc](https://github.com/iden3/circom-witnesscalc)
-  - [ ] [Witnesscalc Adapter](https://github.com/zkmopro/witnesscalc_adapter)
-  - [ ] [Rust-Witness](https://github.com/chancehudson/rust-witness)
-- [x] SnarkJS Compatiblity
+- [x] **Provers**
+  - [x] [Lambdaworks](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter) Circom adapter for Groth16 over BLS12-381
+  - [x] [Arkworks](https://github.com/arkworks-rs/circom-compat) Circom adapter for Groth16 over BN254
+- [ ] **Witness Calculators**
+  - [ ] [Witnesscalc Adapter](https://github.com/zkmopro/witnesscalc_adapter) for witness calculation over C++ artifact
+  - [ ] [Rust-Witness](https://github.com/chancehudson/rust-witness) for witness calculation over WASM artifact
+- [x] **SnarkJS Exports**
   - [x] JSON proof export
   - [x] JSON public signal export
+  - [ ] JSON witness export
 
 ## Installation
 

@@ -1,4 +1,4 @@
-name: "Release libraries"
+name: releases
 
 on:
   release:

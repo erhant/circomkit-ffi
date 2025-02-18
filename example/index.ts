@@ -1,8 +1,8 @@
 import { dlopen, FFIType, suffix } from "bun:ffi";
 
-const path = `${
-  import.meta.dirname
-}/../target/debug/libcircomkit_ffi.${suffix}`; // TODO: download these from github releases
+// const path =
+//   import.meta.dirname + `/../target/debug/libcircomkit_ffi.${suffix}`; // TODO: download these from github releases
+const path = import.meta.dirname + `/lib/libcircomkit_ffi-macOS-arm64.dylib`; // FIXME: remove after testing
 const lib = dlopen(path, {
   /** A diagnostic function, returns the given input back.
    *

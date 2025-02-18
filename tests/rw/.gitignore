@@ -1,0 +1,5 @@
+*
+!.gitignore
+!globals.c
+!handlers.c
+!build_w2c2.sh

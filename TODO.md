@@ -1,2 +1,0 @@
-- [ ] Add Github Workflows
-- [ ] Add zkey reader from LambdaWorks

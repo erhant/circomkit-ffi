@@ -1,5 +1,11 @@
+/// [Arkworks](https://github.com/arkworks-rs/circom-compat)
 pub mod arkworks;
+
+/// [Lambdaworks](https://github.com/lambdaclass/lambdaworks)
 pub mod lambdaworks;
+
+// [Rust Witness](https://github.com/chancehudson/rust-witness)
+// pub mod rust_witness;
 
 mod traits;
 
