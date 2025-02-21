@@ -10,7 +10,7 @@ use std::collections::HashMap;
 /// cargo test --package circomkit-ffi --test rust_witness_test -- test_rust_witness_multiplier_3 --exact --show-output
 /// ```
 ///
-/// Requires `cmake`
+/// Requires `nasm` and `cmake`!
 #[test]
 #[ignore = "does not build on arm64"]
 fn test_rust_witness_multiplier_3() -> eyre::Result<()> {

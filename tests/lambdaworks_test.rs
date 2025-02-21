@@ -1,5 +1,6 @@
 use circomkit_ffi::lambdaworks::*;
 use circomkit_ffi::snarkjs::*;
+use lambdaworks_groth16::common::FrElement;
 
 #[test]
 fn test_lambda_multiplier_3() -> eyre::Result<()> {
@@ -43,6 +44,21 @@ fn test_lambda_multiplier_3() -> eyre::Result<()> {
     //     "tests/res/lambdaworks_mul3_proof.json",
     // )?;
     // assert!(output.status.success());
+
+    Ok(())
+}
+
+#[test]
+fn test_lambdaworks_multiplier_3_witness_reader() -> eyre::Result<()> {
+    let wtns_path = "tests/res/mul3.wtns";
+    let wtns = load_witness(wtns_path).unwrap();
+    assert_eq!(wtns.len(), 6);
+    assert_eq!(wtns[0], FrElement::from(1)); // constant
+    assert_eq!(wtns[1], FrElement::from(80)); // public
+    assert_eq!(wtns[2], FrElement::from(2));
+    assert_eq!(wtns[3], FrElement::from(4));
+    assert_eq!(wtns[4], FrElement::from(10));
+    assert_eq!(wtns[5], FrElement::from(8));
 
     Ok(())
 }

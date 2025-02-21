@@ -9,6 +9,8 @@ pub mod lambdaworks;
 
 mod traits;
 
+mod witness;
+
 pub mod snarkjs;
 use std::ffi::{c_char, CStr, CString};
 
