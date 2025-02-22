@@ -15,8 +15,7 @@ pub mod snarkjs;
 use std::ffi::{c_char, CStr, CString};
 
 /// Given a string input, returns the same.
-///
-/// Can be used for testing.
+/// Should be used for testing purposes of the FFI logic.
 #[no_mangle]
 #[allow(improper_ctypes_definitions)]
 #[allow(clippy::not_unsafe_ptr_arg_deref)]
@@ -29,7 +28,7 @@ pub extern "C" fn echo(input: *const c_char) -> CString {
     CString::new(input).unwrap()
 }
 
-/// Generate an Arkworks proof.
+/// Generate an Arkworks proof from a given witness, R1CS and prover key path.
 #[no_mangle]
 #[allow(improper_ctypes_definitions)]
 pub extern "C" fn arkworks_prove(

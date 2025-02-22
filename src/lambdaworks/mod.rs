@@ -6,7 +6,7 @@ pub use lambdaworks_groth16::*;
 use lambdaworks_math::traits::ByteConversion;
 
 use crate::{
-    snarkjs::{SnarkjsProof, SnarkjsPublicSignals},
+    snarkjs::{SnarkjsGroth16Proof, SnarkjsPublicSignals},
     witness::parse_witness_to_elems,
 };
 
@@ -32,7 +32,7 @@ pub fn prove_with_witness(wtns_json_path: impl AsRef<Path>, r1cs_path: impl AsRe
     let accept = verify(&verifying_key, &proof, &pubs);
     assert!(accept, "proof is not accepted");
 
-    let snarkjs_proof = SnarkjsProof::from(&proof);
+    let snarkjs_proof = SnarkjsGroth16Proof::from(&proof);
     println!("{:#?}", snarkjs_proof);
 
     let snarkjs_public_signals = SnarkjsPublicSignals::from_lambdaworks(pubs);

@@ -1,8 +1,8 @@
-use crate::snarkjs::{SnarkjsProof, SnarkjsPublicSignals};
+use crate::snarkjs::{SnarkjsGroth16Proof, SnarkjsPublicSignals};
 
 type ArkworksProof = ark_groth16::Proof<ark_bn254::Bn254>;
 
-impl From<&ArkworksProof> for SnarkjsProof {
+impl From<&ArkworksProof> for SnarkjsGroth16Proof {
     fn from(proof: &ArkworksProof) -> Self {
         Self {
             pi_a: [proof.a.x.to_string(), proof.a.y.to_string()],
@@ -17,7 +17,7 @@ impl From<&ArkworksProof> for SnarkjsProof {
     }
 }
 
-impl From<ArkworksProof> for SnarkjsProof {
+impl From<ArkworksProof> for SnarkjsGroth16Proof {
     fn from(proof: ArkworksProof) -> Self {
         Self::from(&proof)
     }

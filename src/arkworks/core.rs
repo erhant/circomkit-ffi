@@ -1,10 +1,12 @@
 use ark_bn254::{Bn254, Fr};
 use ark_circom::{
-    circom::R1CSFile, read_zkey, CircomBuilder, CircomCircuit, CircomConfig, CircomReduction,
+    circom::{R1CSFile, R1CS},
+    read_zkey, CircomBuilder, CircomCircuit, CircomConfig, CircomReduction,
 };
 use ark_ff::PrimeField;
 use ark_groth16::{Groth16, Proof, ProvingKey};
 use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystem, SynthesisError};
+use ark_serialize::SerializationError;
 use ark_std::rand::thread_rng;
 use eyre::Result;
 use std::{
@@ -26,16 +28,23 @@ pub fn load_circom_config<F: PrimeField>(
     CircomConfig::new(wasm_path, r1cs_path)
 }
 
+#[inline(always)]
+pub fn load_r1cs<F: PrimeField>(
+    r1cs_path: impl AsRef<Path>,
+) -> Result<R1CS<F>, SerializationError> {
+    let reader = BufReader::new(File::open(r1cs_path)?);
+    Ok(R1CSFile::new(reader)?.into())
+}
 /// Loads Circom files from an existing R1CS and computed witness file in JSON.
 #[inline(always)]
 pub fn load_circom_with_witness_json<F: PrimeField>(
     r1cs_path: impl AsRef<Path>,
-    wtns_path: impl AsRef<Path>,
+    wtns_json_path: impl AsRef<Path>,
 ) -> Result<CircomCircuit<F>>
 where
     <F as FromStr>::Err: Debug,
 {
-    let witness = load_witness_json::<F>(wtns_path)?;
+    let witness = load_witness_json::<F>(wtns_json_path)?;
 
     let reader = BufReader::new(File::open(r1cs_path)?);
     let r1cs = R1CSFile::new(reader)?.into();
@@ -57,15 +66,14 @@ where
 /// Loads proving key (which can generate verification key too) from an existing `zKey` file.
 #[inline(always)]
 pub fn load_prover_key(pkey_path: impl AsRef<Path>) -> Result<ProvingKey<Bn254>> {
-    let f = File::open(pkey_path)?;
-    let mut reader = BufReader::new(f);
+    let mut reader = BufReader::new(File::open(pkey_path)?);
     let (params, _) = read_zkey(&mut reader)?;
 
     Ok(params)
 }
 
 /// Creates a circuit with the given witness.
-pub fn with_witness<F: PrimeField>(cfg: CircomConfig<F>, witness: Vec<F>) -> CircomCircuit<F> {
+pub fn assign_witness<F: PrimeField>(cfg: CircomConfig<F>, witness: Vec<F>) -> CircomCircuit<F> {
     let circom = CircomCircuit {
         r1cs: cfg.r1cs,
         witness: Some(witness),

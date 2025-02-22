@@ -1,10 +1,10 @@
 use lambdaworks_math::field::{element::FieldElement, traits::IsPrimeField};
 
-use crate::snarkjs::{SnarkjsProof, SnarkjsPublicSignals};
+use crate::snarkjs::{SnarkjsGroth16Proof, SnarkjsPublicSignals};
 
 type LambdaworksProof = lambdaworks_groth16::Proof;
 
-impl From<&LambdaworksProof> for SnarkjsProof {
+impl From<&LambdaworksProof> for SnarkjsGroth16Proof {
     fn from(proof: &lambdaworks_groth16::Proof) -> Self {
         Self {
             pi_a: [
@@ -31,7 +31,7 @@ impl From<&LambdaworksProof> for SnarkjsProof {
     }
 }
 
-impl From<LambdaworksProof> for SnarkjsProof {
+impl From<LambdaworksProof> for SnarkjsGroth16Proof {
     fn from(proof: LambdaworksProof) -> Self {
         Self::from(&proof)
     }

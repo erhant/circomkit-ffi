@@ -33,4 +33,5 @@ Some helpful resources for this project on FFI usage were:
 - <https://jakegoulding.com/rust-ffi-omnibus/string_return/>
 - <https://jakegoulding.com/rust-ffi-omnibus/string_arguments/>
 - <https://bun.sh/docs/api/ffi>
+- <https://github.com/node-ffi/node-ffi/wiki/Node-FFI-Tutorial>
 - <https://tokio.rs/tokio/topics/bridging>

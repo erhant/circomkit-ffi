@@ -1,8 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-/// A proof object, similar to how SnarkJS exports it.
+/// A Groth16 proof object, similar to how SnarkJS exports it.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SnarkjsProof {
+pub struct SnarkjsGroth16Proof {
     /// A point in G1
     pub pi_a: [String; 2],
     /// A point in G2
@@ -15,16 +15,42 @@ pub struct SnarkjsProof {
     pub curve: String,
 }
 
+impl std::fmt::Display for SnarkjsGroth16Proof {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", serde_json::to_string_pretty(&self).unwrap())
+    }
+}
+
+/// Public signals object, similar to how SnarkJS exports it.
+///
+/// Each signal is a string that should be parsed into a `BigInt`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SnarkjsPublicSignals(pub Vec<String>);
 
+impl std::fmt::Display for SnarkjsPublicSignals {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", serde_json::to_string_pretty(&self).unwrap())
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SnarkjsOutput {
-    pub proof: SnarkjsProof,
+    pub proof: SnarkjsGroth16Proof,
     pub public_signals: SnarkjsPublicSignals,
 }
 
-/// Execute the following command.
+impl std::fmt::Display for SnarkjsOutput {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "Proof: {}\nPublic Signals: {}",
+            serde_json::to_string_pretty(&self.proof).unwrap(),
+            serde_json::to_string_pretty(&self.public_signals).unwrap()
+        )
+    }
+}
+
+/// Executes the following command:
 ///
 /// ```sh
 /// snarkjs g16v [verification_key.json] [public.json] [proof.json]

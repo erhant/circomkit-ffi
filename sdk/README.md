@@ -1,8 +1,11 @@
-# example
+# Circomkit FFI
+
+## Installation
 
 To install dependencies:
 
 ```bash
+# we are using Bun as package manager
 bun install
 ```
 

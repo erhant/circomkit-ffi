@@ -22,7 +22,7 @@ fn test_lambda_multiplier_3() -> eyre::Result<()> {
     let accept = verify(&verifying_key, &proof, &pubs);
     assert!(accept, "proof is not accepted");
 
-    let snarkjs_proof = SnarkjsProof::from(&proof);
+    let snarkjs_proof = SnarkjsGroth16Proof::from(&proof);
     std::fs::write(
         "tests/res/lambdaworks_mul3_proof.json",
         serde_json::to_string_pretty(&snarkjs_proof).unwrap(),
