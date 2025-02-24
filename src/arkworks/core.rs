@@ -19,15 +19,6 @@ use std::{
 
 use crate::witness::parse_witness_to_elems;
 
-/// Loads Circom files from an existing R1CS and WASM file to compute the witness dynamically.
-#[inline(always)]
-pub fn load_circom_config<F: PrimeField>(
-    r1cs_path: impl AsRef<Path>,
-    wasm_path: impl AsRef<Path>,
-) -> Result<CircomConfig<F>> {
-    CircomConfig::new(wasm_path, r1cs_path)
-}
-
 #[inline(always)]
 pub fn load_r1cs<F: PrimeField>(
     r1cs_path: impl AsRef<Path>,
@@ -35,57 +26,14 @@ pub fn load_r1cs<F: PrimeField>(
     let reader = BufReader::new(File::open(r1cs_path)?);
     Ok(R1CSFile::new(reader)?.into())
 }
-/// Loads Circom files from an existing R1CS and computed witness file in JSON.
-#[inline(always)]
-pub fn load_circom_with_witness_json<F: PrimeField>(
-    r1cs_path: impl AsRef<Path>,
-    wtns_json_path: impl AsRef<Path>,
-) -> Result<CircomCircuit<F>>
-where
-    <F as FromStr>::Err: Debug,
-{
-    let witness = load_witness_json::<F>(wtns_json_path)?;
-
-    let reader = BufReader::new(File::open(r1cs_path)?);
-    let r1cs = R1CSFile::new(reader)?.into();
-
-    let circom = CircomCircuit {
-        r1cs,
-        witness: Some(witness),
-    };
-
-    debug_assert_eq!(
-        verify_constraints(circom.clone()),
-        Ok(true),
-        "constraints not satisfied"
-    );
-
-    Ok(circom)
-}
 
 /// Loads proving key (which can generate verification key too) from an existing `zKey` file.
 #[inline(always)]
-pub fn load_prover_key(pkey_path: impl AsRef<Path>) -> Result<ProvingKey<Bn254>> {
+pub fn load_proving_key(pkey_path: impl AsRef<Path>) -> Result<ProvingKey<Bn254>> {
     let mut reader = BufReader::new(File::open(pkey_path)?);
     let (params, _) = read_zkey(&mut reader)?;
 
     Ok(params)
-}
-
-/// Creates a circuit with the given witness.
-pub fn assign_witness<F: PrimeField>(cfg: CircomConfig<F>, witness: Vec<F>) -> CircomCircuit<F> {
-    let circom = CircomCircuit {
-        r1cs: cfg.r1cs,
-        witness: Some(witness),
-    };
-
-    debug_assert_eq!(
-        verify_constraints(circom.clone()),
-        Ok(true),
-        "constraints not satisfied"
-    );
-
-    circom
 }
 
 /// Loads a witness from witness JSON file.
@@ -147,6 +95,7 @@ pub fn verify_constraints<F: PrimeField>(
 ///
 /// https://github.com/arkworks-rs/circom-compat/issues/35 see this for a related issue
 #[inline(always)]
+#[allow(unused)]
 pub fn setup_circom_bn254_circuit(
     builder: CircomBuilder<Fr>,
 ) -> Result<ProvingKey<Bn254>, SynthesisError> {
@@ -181,4 +130,25 @@ pub fn verify(
         proof,
         public_inputs,
     )
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_arkworks_multiplier_3_witness_reader() -> eyre::Result<()> {
+        use ark_bn254::Fr;
+        let wtns_path = "tests/res/mul3.wtns";
+        let wtns = load_witness::<Fr>(wtns_path).unwrap();
+        assert_eq!(wtns.len(), 6);
+        assert_eq!(wtns[0], Fr::from(1)); // constant
+        assert_eq!(wtns[1], Fr::from(80)); // public
+        assert_eq!(wtns[2], Fr::from(2));
+        assert_eq!(wtns[3], Fr::from(4));
+        assert_eq!(wtns[4], Fr::from(10));
+        assert_eq!(wtns[5], Fr::from(8));
+
+        Ok(())
+    }
 }

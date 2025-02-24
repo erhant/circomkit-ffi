@@ -1,6 +1,6 @@
 use lambdaworks_math::field::{element::FieldElement, traits::IsPrimeField};
 
-use crate::snarkjs::{SnarkjsGroth16Proof, SnarkjsPublicSignals};
+use crate::snarkjs::{SnarkjsGroth16Proof, SnarkjsPublicInputs};
 
 type LambdaworksProof = lambdaworks_groth16::Proof;
 
@@ -37,7 +37,7 @@ impl From<LambdaworksProof> for SnarkjsGroth16Proof {
     }
 }
 
-impl SnarkjsPublicSignals {
+impl SnarkjsPublicInputs {
     pub fn from_lambdaworks<F: IsPrimeField>(
         public_signals: impl AsRef<[FieldElement<F>]>,
     ) -> Self {

@@ -25,9 +25,9 @@ impl std::fmt::Display for SnarkjsGroth16Proof {
 ///
 /// Each signal is a string that should be parsed into a `BigInt`.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SnarkjsPublicSignals(pub Vec<String>);
+pub struct SnarkjsPublicInputs(pub Vec<String>);
 
-impl std::fmt::Display for SnarkjsPublicSignals {
+impl std::fmt::Display for SnarkjsPublicInputs {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", serde_json::to_string_pretty(&self).unwrap())
     }
@@ -36,7 +36,7 @@ impl std::fmt::Display for SnarkjsPublicSignals {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SnarkjsOutput {
     pub proof: SnarkjsGroth16Proof,
-    pub public_signals: SnarkjsPublicSignals,
+    pub public_signals: SnarkjsPublicInputs,
 }
 
 impl std::fmt::Display for SnarkjsOutput {

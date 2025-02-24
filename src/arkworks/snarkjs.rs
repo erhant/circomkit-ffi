@@ -1,4 +1,4 @@
-use crate::snarkjs::{SnarkjsGroth16Proof, SnarkjsPublicSignals};
+use crate::snarkjs::{SnarkjsGroth16Proof, SnarkjsPublicInputs};
 
 type ArkworksProof = ark_groth16::Proof<ark_bn254::Bn254>;
 
@@ -23,7 +23,7 @@ impl From<ArkworksProof> for SnarkjsGroth16Proof {
     }
 }
 
-impl SnarkjsPublicSignals {
+impl SnarkjsPublicInputs {
     #[inline]
     pub fn from_arkworks<F: ark_ff::PrimeField>(public_signals: impl AsRef<[F]>) -> Self {
         Self(
