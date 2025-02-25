@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "bun:test";
-import { circomkitFFIBun, circomkitFFINode, getLibPath } from "../src";
+import { CircomkitFFINode, CircomkitFFIBun, getLibPath } from "../src";
 import { existsSync } from "fs";
 
 describe("ffi", () => {
@@ -10,20 +10,16 @@ describe("ffi", () => {
   });
 
   it("should work with bun:ffi (Bun)", () => {
-    const lib = circomkitFFIBun(PATH);
+    const lib = new CircomkitFFIBun(PATH);
     const input = "hi theree";
-    const output = lib.symbols.echo(
-      new Uint8Array(Buffer.from(input + "\0", "utf8"))
-    );
+    const output = lib.echo(input);
     expect(output.toString()).toEqual(input);
   });
 
   it("should work with ffi-rs (Node)", () => {
-    const { open, lib, close } = circomkitFFINode(PATH);
+    const lib = new CircomkitFFINode(PATH);
     const input = "hi theree";
-    open();
-    const output = lib.echo([input]);
+    const output = lib.echo(input);
     expect(output.toString()).toEqual(input);
-    close();
   });
 });

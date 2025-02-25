@@ -1,8 +1,7 @@
 use std::path::Path;
 
-pub use lambdaworks_circom_adapter::*;
+use lambdaworks_circom_adapter::*;
 use lambdaworks_groth16::common::FrElement;
-pub use lambdaworks_groth16::*;
 use lambdaworks_math::traits::ByteConversion;
 
 use crate::snarkjs::*;
@@ -26,8 +25,8 @@ pub fn prove_with_witness(
 
     let (qap, wtns, pubs) = circom_to_lambda(r1cs, wtns);
 
-    let (proving_key, verifying_key) = setup(&qap);
-    let proof = Prover::prove(&wtns, &qap, &proving_key);
+    let (proving_key, verifying_key) = lambdaworks_groth16::setup(&qap);
+    let proof = lambdaworks_groth16::Prover::prove(&wtns, &qap, &proving_key);
 
     // println!(
     //     "{:#?}",
@@ -37,7 +36,7 @@ pub fn prove_with_witness(
     // );
 
     debug_assert!(
-        verify(&verifying_key, &proof, &pubs),
+        lambdaworks_groth16::verify(&verifying_key, &proof, &pubs),
         "proof is not accepted"
     );
 
@@ -52,6 +51,7 @@ pub fn prove_with_witness(
 }
 
 /// Like `read_raw_circom_witness`, but actually reads raw witness file instead of JSON.
+#[inline]
 fn read_raw_circom_witness(wtns_path: impl AsRef<Path>) -> Result<Vec<FrElement>, std::io::Error> {
     let wtns_data = std::fs::read(wtns_path)?;
     parse_witness_to_elems(&wtns_data, |bytes| FrElement::from_bytes_le(bytes).unwrap())

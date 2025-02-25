@@ -18,7 +18,15 @@ const SUPPORTED_ARCH = {
   arm64: "arm64",
 } as const;
 
-/** Attaches the library filename (w.r.t platform) to the given directory. */
+/** Attaches the library filename (w.r.t platform) to the given directory.
+ *
+ * @param dir the directory to attach the library filename to
+ * @returns the path to the library
+ * @example
+ * // e.g. on macOS Intel chip:
+ * const path = getLibPath(".");
+ * // path = "./libcircomkit_ffi-macOS-amd64.dylib"
+ */
 export function getLibPath(dir: string) {
   return `${dir}/${getLibFilename()}`;
 }
@@ -26,6 +34,11 @@ export function getLibPath(dir: string) {
 /**
  * Returns the filename of the release library for this machine.
  * Throws an error if the architecture or OS is not supported.
+ *
+ * Supported OS & ARCH:
+ * - **MacOS** Intel & Apple Silion
+ * - **Linux** AMD64 & ARM64
+ * - **Windows** x64
  */
 export function getLibFilename() {
   // check if the current CPU architecture is supported
@@ -79,7 +92,7 @@ export async function downloadRelease(dir: string): Promise<string> {
 
 /** Returns whether the current environment is Bun or not. */
 export function isBun(): boolean {
-  // @ts-ignore
   // ignore is required as `Bun` is not defined in Node
+  // @ts-ignore
   return typeof Bun !== "undefined";
 }

@@ -1,3 +1,3 @@
-export * from "./bun";
-export * from "./node";
-export * from "./common";
+export { CircomkitFFIBun } from "./bun";
+export { CircomkitFFINode } from "./node";
+export { isBun, getLibPath, getLibFilename } from "./common";

@@ -1,3 +1,5 @@
+#![cfg(feature = "witness-gen")]
+
 /// Execute with:
 ///
 /// ```sh

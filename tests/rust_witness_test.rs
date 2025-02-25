@@ -1,4 +1,5 @@
 #![allow(unused)]
+#![cfg(feature = "witness-gen")]
 
 use num_bigint::BigInt;
 use rust_witness::{transpile::transpile_wasm, witness};

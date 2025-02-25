@@ -1,0 +1,31 @@
+export interface ProverBackend {
+  /** The path to the shared library. */
+  path: string;
+
+  /**
+   * A diagnostic function, returns the given input back.
+   *
+   * @param input string to be echoed back
+   * @returns the input string
+   */
+  echo(input: string): string;
+
+  /**
+   * Prove with Arkworks.
+   *
+   * @param wtnsPath witness file path (`.json` or `.wtns.json`)
+   * @param r1csPath r1cs file path (`.r1cs`)
+   * @param zkeyPath proving key file path (`.zkey`)
+   * @returns SnarkJS Groth16 proof as a stringified JSON
+   */
+  arkworks_prove(wtnsPath: string, r1csPath: string, pkeyPath: string): string;
+
+  /**
+   * Prove with Lambdaworks.
+   *
+   * @param wtnsPath witness file path (`.json` or `.wtns.json`)
+   * @param r1csPath r1cs file path (`.r1cs`)
+   * @returns SnarkJS Groth16 proof as a stringified JSON
+   */
+  lambdaworks_prove(wtnsPath: string, r1csPath: string): string;
+}

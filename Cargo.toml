@@ -6,6 +6,11 @@ edition = "2021"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
+[features]
+# only enable the witness-gen feature for witness generation functionality
+# which is not working yet, and breaks tests as well due to build-level stuff
+witness-gen = ["paste", "rust-witness", "witnesscalc-adapter"]
+
 [dependencies]
 # lambdaworks
 lambdaworks-math = { git = "https://github.com/erhant/lambdaworks", branch = "erhant/fix-circom-adapter" }
@@ -35,10 +40,10 @@ ark-poly = { version = "0.4.2", default-features = false, features = [
 ark-relations = { version = "0.4.0", default-features = false }
 ark-serialize = { version = "0.4.2", default-features = false }
 
-# rust-witness
-paste = "1.0.15"
-rust-witness = "0.1.3"
-witnesscalc-adapter = "0.1.0"
+# witness generation stuff
+paste = { version = "1.0.15", optional = true }
+rust-witness = { version = "0.1.3", optional = true }
+witnesscalc-adapter = { version = "0.1.0", optional = true }
 
 # utils
 rand = "0.8.5"
