@@ -1,6 +1,6 @@
-# Circomkit FFI
+# Circomkit FFI - SDK
 
-## Installation
+This SDK allows a wrapper-class for FFI calls, for Bun and Node runtimes.
 
 To install dependencies:
 
@@ -9,10 +9,14 @@ To install dependencies:
 bun install
 ```
 
-To run:
+Run tests:
 
 ```bash
-bun run index.ts
+bun test
 ```
 
-This project was created using `bun init` in bun v1.1.43. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+Build using:
+
+```bash
+bun run build.ts
+```

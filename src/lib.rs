@@ -1,18 +1,15 @@
+use std::ffi::{c_char, CStr, CString};
+
+/// SnarkJS compatibility layer.
+pub mod snarkjs;
+
 /// [Arkworks](https://github.com/arkworks-rs/circom-compat)
 pub mod arkworks;
-
 /// [Lambdaworks](https://github.com/lambdaclass/lambdaworks)
 pub mod lambdaworks;
 
-// [Rust Witness](https://github.com/chancehudson/rust-witness)
-// pub mod rust_witness;
-
 mod traits;
-
 mod witness;
-
-pub mod snarkjs;
-use std::ffi::{c_char, CStr, CString};
 
 /// Given a string input, returns the same.
 /// Should be used for testing purposes of the FFI logic.
