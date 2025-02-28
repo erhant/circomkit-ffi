@@ -1,28 +1,32 @@
 # Circomkit FFI
 
-This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. It features:
-
-- [x] **Provers**
-  - [x] [Lambdaworks](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter) Circom adapter for Groth16 over BLS12-381
-  - [x] [Arkworks](https://github.com/arkworks-rs/circom-compat) Circom adapter for Groth16 over BN254
-- [ ] **Witness Calculators**
-  - [ ] [Witnesscalc Adapter](https://github.com/zkmopro/witnesscalc_adapter) for witness calculation over C++ artifact
-  - [ ] [Rust-Witness](https://github.com/chancehudson/rust-witness) for witness calculation over WASM artifact
-- [x] **SnarkJS Exports**
-  - [x] JSON proof export
-  - [x] JSON public signal export
-  - [ ] JSON witness export
+This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. It features prover backends via [Lambdaworks](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter) Circom adapter for Groth16 over BLS12-381 and [Arkworks](https://github.com/arkworks-rs/circom-compat) Circom adapter for Groth16 over BN254. It also provides [SnarkJS](https://github.com/iden3/snarkjs) exports for both prover backends, to export proof objects and public signals.
 
 ## Installation
 
-TODO:
+The FFI libraries are exposed through an SDK, which is published on NPM.
 
-maybe we do feature-gating and have a separate library for each backend?
-or just a single backend for all
+```sh
+npm install circomkit-ffi
+```
+
+The libraries are kept under this repository's releases. It supports the following platforms & architectures:
+
+- Linux `amd64`
+- Linux `arm64`
+- MacOS Intel (`amd64`)
+- MacoS Apple Silicon (`arm64`)
+
+The library will be automatically downloaded when required by the SDK.
 
 ## Usage
 
-TODO:
+The SDK exposes two types of classes:
+
+- `CircomkitFFIBun` uses `bun:ffi` and must be used within a Bun runtime.
+- `CircomkitFFINode` uses `ffi-rs` and can be used by both Bun and Node.
+
+These classes expose a "prove" function for both Arkworks and Lambdaworks backends.
 
 ## Acknowledgements
 
