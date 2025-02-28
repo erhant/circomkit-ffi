@@ -45,10 +45,7 @@ const verifierKey: object = JSON.parse(readFileSync(circomkit.path.ofCircuit(cir
     circomkit.path.ofCircuit(circuitName, "pkey")
   );
 
-  const { proof, publicSignals } = JSON.parse(arkworkOutput) as {
-    proof: snarkjs.Groth16Proof;
-    publicSignals: snarkjs.PublicSignals;
-  };
+  const { proof, publicSignals } = arkworkOutput;
   console.info("Proof generated:");
   console.log(proof);
 }
