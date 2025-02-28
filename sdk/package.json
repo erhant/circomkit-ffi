@@ -2,6 +2,7 @@
   "name": "circomkit-ffi",
   "module": "src/index.ts",
   "type": "module",
+  "version": "0.0.1",
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^22.13.5",
