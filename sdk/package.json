@@ -2,6 +2,7 @@
   "name": "circomkit-ffi",
   "type": "module",
   "version": "0.0.1",
+  "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,6 +12,11 @@
       "default": "./dist/index.mjs"
     }
   },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^22.13.5",
@@ -23,5 +29,13 @@
   },
   "dependencies": {
     "ffi-rs": "^1.2.6"
+  },
+  "homepage": "https://github.com/erhant/circomkit-ffi/sdk#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erhant/circomkit-ffi.git"
+  },
+  "bugs": {
+    "url": "https://github.com/erhant/circomkit-ffi/issues/"
   }
 }
