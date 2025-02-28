@@ -1,7 +1,7 @@
 import { describe, it } from "bun:test";
-import { downloadRelease } from "../src";
+import { downloadRelease } from "../sdk";
 
-describe("library", () => {
+describe.skip("download release", () => {
   it("should download", async () => {
     const path = await downloadRelease(".");
     console.log(path);

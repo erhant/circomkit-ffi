@@ -6,9 +6,6 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./sdk
 
     steps:
       - uses: actions/checkout@v4
@@ -27,4 +24,3 @@ jobs:
         id: publish
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./sdk

@@ -28,6 +28,37 @@ The SDK exposes two types of classes:
 
 These classes expose a "prove" function for both Arkworks and Lambdaworks backends.
 
+## Development
+
+Clone the repository:
+
+```sh
+git clone https://github.com/erhant/circomkit-ffi
+```
+
+For Rust library, we use `cargo`:
+
+```sh
+# build the libraries
+cargo build
+
+# run tests
+cargo test
+```
+
+For SDK, we use `Bun`:
+
+```bash
+# install packages
+bun install
+
+# run tests
+bun test
+
+# build NPM package
+bun run build.ts
+```
+
 ## Acknowledgements
 
 This project is kindly supported by [Soulforge zkBankai](https://soulforge.zkbankai.com/) grant, with the application [here](https://github.com/zk-bankai/soulforge/blob/main/applications/circomkit-bunffi.md).

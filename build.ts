@@ -36,8 +36,8 @@ function getDtsBunPlugin(): BunPlugin {
 }
 
 const result = await Bun.build({
-  entrypoints: ["src/index.ts"],
-  root: "src",
+  entrypoints: ["sdk/index.ts"],
+  root: "sdk",
   outdir: "dist",
   // minify: true,
   // splitting: true,

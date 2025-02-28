@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "bun:test";
-import { CircomkitFFINode, CircomkitFFIBun, getLibPath } from "../src";
+import { CircomkitFFINode, CircomkitFFIBun, getLibPath } from "../sdk";
 import { existsSync } from "fs";
 
 describe("ffi", () => {
