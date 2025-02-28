@@ -4,7 +4,7 @@
     "": {
       "dependencies": {
         "circomkit": "^0.3.2",
-        "circomkit-ffi": "^0.0.2",
+        "circomkit-ffi": "^0.0.3",
         "circomlib": "^2.0.5",
         "snarkjs": "^0.7.5",
       },
@@ -130,7 +130,7 @@
 
     "circomkit": ["circomkit@0.3.2", "", { "dependencies": { "circom_tester": "^0.0.19", "commander": "^12.1.0", "loglevel": "^1.9.2" }, "peerDependencies": { "@types/snarkjs": "^0.7.x", "snarkjs": "^0.7.x" }, "bin": { "circomkit": "dist/cli.js" } }, "sha512-/ek/xtVNaBFlp2g12TPAfn9kSFUnZuKOiCvZFFnPn3JtZwi40r4eTDozPaaJKH4ZZx3alEgCr9MhOP24+o4CvA=="],
 
-    "circomkit-ffi": ["circomkit-ffi@0.0.2", "", { "dependencies": { "ffi-rs": "^1.2.6" }, "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-kmkFqlzrcvAZXT9JsYczb6yNqWUALvHkM4bQMtkK3Qga0a1m6g03LbBx/dHg76H63gQFfEGrd3tQF324kKlUPg=="],
+    "circomkit-ffi": ["circomkit-ffi@0.0.3", "", { "peerDependencies": { "ffi-rs": "^1.2.6", "typescript": "^5.0.0" } }, "sha512-/Ff5sb8jh1FIX/j5yvcAU7gpHPsasGT0K0DlhlHSxLNZEdomso76qUnmofehb9hXELz90O7A9mYMaxy4uQ33Fw=="],
 
     "circomlib": ["circomlib@2.0.5", "", {}, "sha512-O7NQ8OS+J4eshBuoy36z/TwQU0YHw8W3zxZcs4hVwpEll3e4hDm3mgkIPqItN8FDeLEKZFK3YeT/+k8TiLF3/A=="],
 

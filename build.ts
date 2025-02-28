@@ -1,6 +1,5 @@
-// await Bun.$`rm -rf dist`;
-//
 // taken from: https://github.com/oven-sh/bun/issues/5141#issuecomment-2595032410
+await Bun.$`rm -rf dist`;
 
 import type { BunPlugin } from "bun";
 import { isolatedDeclaration } from "oxc-transform";

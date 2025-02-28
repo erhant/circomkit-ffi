@@ -1,14 +1,13 @@
 import { Circomkit } from "circomkit";
-import { CircomkitFFIBun, CircomkitFFINode } from "circomkit-ffi";
-import { existsSync } from "fs";
+import { CircomkitFFIBun, downloadRelease, getLibPath } from "circomkit-ffi";
+import { existsSync, readFileSync } from "fs";
+import * as snarkjs from "snarkjs";
 
 const circomkit = new Circomkit({
   inspect: false,
 });
 const N = 3;
 const IN = Array.from({ length: N }, (_, i) => i + 1);
-
-const OUT = IN.reduce((acc, x) => acc * x);
 
 const circuitName = `multiplier_${N}`;
 const inputName = "default";
@@ -28,11 +27,42 @@ const witnessPath = await circomkit.witness(circuitName, inputName, {
 console.info(`Witness created at ${witnessPath}`);
 
 // console.info("Generating a proof with Arkworks");
-const circomkitFFI = new CircomkitFFIBun("./");
-const proof = circomkitFFI.arkworks_prove(
-  circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
-  circomkit.path.ofCircuit(circuitName, "r1cs"),
-  circomkit.path.ofPtau("powersOfTau28_hez_final_08.ptau")
-);
+const libPath = getLibPath(import.meta.dir);
+if (!existsSync(libPath)) {
+  console.info("Downloading FFI library.");
+  await downloadRelease(import.meta.dir);
+}
 
-console.log(proof);
+const circomkitFFI = new CircomkitFFIBun(libPath);
+
+const verifierKey: object = JSON.parse(readFileSync(circomkit.path.ofCircuit(circuitName, "vkey"), "utf-8"));
+
+{
+  console.info("Generating a proof with Arkworks");
+  const arkworkOutput = circomkitFFI.arkworks_prove(
+    circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
+    circomkit.path.ofCircuit(circuitName, "r1cs"),
+    circomkit.path.ofCircuit(circuitName, "pkey")
+  );
+
+  const { proof, publicSignals } = JSON.parse(arkworkOutput) as {
+    proof: snarkjs.Groth16Proof;
+    publicSignals: snarkjs.PublicSignals;
+  };
+  console.info("Proof generated:");
+  console.log(proof);
+}
+
+{
+  console.info("Generating a proof with SnarkJS");
+  const { proof, publicSignals } = await snarkjs.groth16.prove(
+    circomkit.path.ofCircuit(circuitName, "pkey"),
+    circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
+    undefined,
+    { singleThread: true }
+  );
+  console.info("Proof generated:");
+  console.log(proof);
+}
+
+// TODO: verificaiton fails due to Bun errors?

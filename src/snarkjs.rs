@@ -11,7 +11,7 @@ pub struct SnarkjsGroth16Proof {
     pub pi_c: [String; 2],
     /// Protocol name, should be "groth16"
     pub protocol: String,
-    /// Curve name, should be "bls12381" or "bn254"
+    /// Curve name, should be "bls12381" or "bn254 / bn128 / altbn128"
     pub curve: String,
 }
 

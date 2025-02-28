@@ -1,5 +1,5 @@
 import { dlopen, FFIType } from "bun:ffi";
-import type { ProverBackend } from "./interface";
+import type { ProofWithPublicSignals, ProverBackend } from "./interface";
 import { isBun } from "./common";
 
 /**
@@ -31,7 +31,11 @@ export class CircomkitFFIBun implements ProverBackend {
     return result.toString();
   }
 
-  arkworks_prove(wtnsPath: string, r1csPath: string, pkeyPath: string): string {
+  arkworks_prove(
+    wtnsPath: string,
+    r1csPath: string,
+    pkeyPath: string
+  ): ProofWithPublicSignals {
     const {
       symbols: { arkworks_prove },
     } = dlopen(this.path, {
@@ -46,10 +50,13 @@ export class CircomkitFFIBun implements ProverBackend {
       new Uint8Array(Buffer.from(r1csPath + "\0", "utf8")),
       new Uint8Array(Buffer.from(pkeyPath + "\0", "utf8"))
     );
-    return result.toString();
+    return JSON.parse(result.toString());
   }
 
-  lambdaworks_prove(wtnsPath: string, r1csPath: string): string {
+  lambdaworks_prove(
+    wtnsPath: string,
+    r1csPath: string
+  ): ProofWithPublicSignals {
     const {
       symbols: { lambdaworks_prove },
     } = dlopen(this.path, {
@@ -63,6 +70,6 @@ export class CircomkitFFIBun implements ProverBackend {
       new Uint8Array(Buffer.from(wtnsPath + "\0", "utf8")),
       new Uint8Array(Buffer.from(r1csPath + "\0", "utf8"))
     );
-    return result.toString();
+    return JSON.parse(result.toString());
   }
 }
