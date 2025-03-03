@@ -7,7 +7,7 @@ This repository contains an all-in-one adapter for several backends, mainly to b
 The FFI libraries are exposed through an SDK, which is published on NPM.
 
 ```sh
-npm install circomkit-ffi
+npm install circomkit-ffi ffi-rs
 ```
 
 The libraries are kept under this repository's releases. It supports the following platforms & architectures:
@@ -35,6 +35,8 @@ Clone the repository:
 ```sh
 git clone https://github.com/erhant/circomkit-ffi
 ```
+
+Note that Arkworks requires a Tokio runtime, even if nothing has to be `await`ed.
 
 ### Library
 

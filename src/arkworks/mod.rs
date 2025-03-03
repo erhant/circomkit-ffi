@@ -88,20 +88,22 @@ pub fn prove_with_setup(
 mod tests {
     use super::*;
 
-    fn check_snarkjs_output(snarkjs_out: &SnarkjsOutput) -> eyre::Result<()> {
+    const CIRCUIT: &str = "mul30";
+
+    fn check_snarkjs_output(snarkjs_out: &SnarkjsOutput, circuit_name: &str) -> eyre::Result<()> {
         std::fs::write(
-            "tests/res/arkworks_mul3_proof.json",
+            &format!("tests/res/arkworks_{}_proof.json", circuit_name),
             serde_json::to_string_pretty(&snarkjs_out.proof).unwrap(),
         )?;
         std::fs::write(
-            "tests/res/arkworks_mul3_public.json",
+            &format!("tests/res/arkworks_{}_public.json", circuit_name),
             serde_json::to_string_pretty(&snarkjs_out.public_signals).unwrap(),
         )?;
 
         let output = snarkjs_verify_groth16(
-            "tests/res/mul3_groth16_vkey.json",
-            "tests/res/arkworks_mul3_public.json",
-            "tests/res/arkworks_mul3_proof.json",
+            &format!("tests/res/{}_groth16_vkey.json", circuit_name),
+            &format!("tests/res/arkworks_{}_public.json", circuit_name),
+            &format!("tests/res/arkworks_{}_proof.json", circuit_name),
         )?;
         assert!(output.status.success());
 
@@ -110,25 +112,24 @@ mod tests {
 
     #[tokio::test]
     async fn test_arkworks_mul3_without_witness() -> eyre::Result<()> {
-        // due to internals of Arkworks we need tokio runtime even if nothing is async
-        let wasm_path = "tests/res/mul3.wasm";
-        let r1cs_path = "tests/res/mul3.r1cs";
-        let pkey_path = "tests/res/mul3_groth16.zkey";
+        let wasm_path = format!("tests/res/{}.wasm", CIRCUIT);
+        let r1cs_path = format!("tests/res/{}.r1cs", CIRCUIT);
+        let pkey_path = format!("tests/res/{}_groth16.zkey", CIRCUIT);
 
         // you can push same input few times, if its an array
         let inputs = vec![("in", 2), ("in", 4), ("in", 10)];
 
         let snarkjs_out = prove_with_setup(r1cs_path, wasm_path, pkey_path, inputs);
-        check_snarkjs_output(&snarkjs_out)
+        check_snarkjs_output(&snarkjs_out, CIRCUIT)
     }
 
     #[tokio::test]
     async fn test_arkworks_mul3_with_witness() -> eyre::Result<()> {
-        let wtns_path = "tests/res/mul3.wtns";
-        let r1cs_path = "tests/res/mul3.r1cs";
-        let pkey_path = "tests/res/mul3_groth16.zkey";
+        let wtns_path = format!("tests/res/{}.wtns", CIRCUIT);
+        let r1cs_path = format!("tests/res/{}.r1cs", CIRCUIT);
+        let pkey_path = format!("tests/res/{}_groth16.zkey", CIRCUIT);
 
         let snarkjs_out = prove_with_existing_witness(r1cs_path, wtns_path, pkey_path);
-        check_snarkjs_output(&snarkjs_out)
+        check_snarkjs_output(&snarkjs_out, CIRCUIT)
     }
 }

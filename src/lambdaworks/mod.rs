@@ -14,6 +14,9 @@ pub fn prove_with_witness(
     r1cs_path: impl AsRef<Path>,
     wtns_path: impl AsRef<Path>,
 ) -> SnarkjsOutput {
+    if !r1cs_path.as_ref().ends_with(".json") {
+        panic!("R1CS file must be in JSON format");
+    }
     let r1cs = read_circom_r1cs(r1cs_path).unwrap();
 
     // if wtns path ends with JSON, use `load_witness_json`, otherwise, use `load_witness`

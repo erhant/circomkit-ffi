@@ -3,5 +3,15 @@
     "file": "multiplier",
     "template": "Multiplier",
     "params": [3]
+  },
+  "multiplier_30": {
+    "file": "multiplier",
+    "template": "Multiplier",
+    "params": [30]
+  },
+  "multiplier_300": {
+    "file": "multiplier",
+    "template": "Multiplier",
+    "params": [300]
   }
 }
