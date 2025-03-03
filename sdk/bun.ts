@@ -10,7 +10,10 @@ import { isBun } from "./common";
  * @implements ProverBackend
  */
 export class CircomkitFFIBun implements ProverBackend {
-  constructor(readonly path: string) {
+  constructor(
+    /** Path to the library, */
+    readonly path: string
+  ) {
     // ensure that Bun is the current environment
     if (!isBun()) {
       throw new Error("This is not a Bun environment!");

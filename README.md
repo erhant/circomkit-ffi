@@ -12,10 +12,10 @@ npm install circomkit-ffi
 
 The libraries are kept under this repository's releases. It supports the following platforms & architectures:
 
-- Linux `amd64`
-- Linux `arm64`
-- MacOS Intel (`amd64`)
-- MacoS Apple Silicon (`arm64`)
+- Linux amd64
+- Linux arm64
+- MacOS Intel (amd64)
+- MacoS Apple Silicon (arm64)
 
 The library will be automatically downloaded when required by the SDK.
 
@@ -23,8 +23,8 @@ The library will be automatically downloaded when required by the SDK.
 
 The SDK exposes two types of classes:
 
-- `CircomkitFFIBun` uses `bun:ffi` and must be used within a Bun runtime.
-- `CircomkitFFINode` uses `ffi-rs` and can be used by both Bun and Node.
+- `CircomkitFFIBun` uses [`bun:ffi`](https://bun.sh/docs/api/ffi) and must be used within a Bun runtime.
+- `CircomkitFFINode` uses [`ffi-rs`](https://github.com/zhangyuang/node-ffi-rs/) and can be used by both Bun and Node.
 
 These classes expose a "prove" function for both Arkworks and Lambdaworks backends.
 
@@ -36,28 +36,43 @@ Clone the repository:
 git clone https://github.com/erhant/circomkit-ffi
 ```
 
-For Rust library, we use `cargo`:
+### Library
+
+The library called by FFI is written in Rust. You can build the library (for your own machine) using:
 
 ```sh
-# build the libraries
 cargo build
+```
 
-# run tests
+You can run the tests with:
+
+```sh
 cargo test
 ```
 
-For SDK, we use `Bun`:
+The tests require you to have installed [SnarkJS](https://github.com/iden3/snarkjs) globally, to verify that the FFI-generated proof is valid.
 
-```bash
-# install packages
+### SDK
+
+The SDK that provides an interface to the FFI-library is written in TypeScript, and we use Bun for this. Install packages with:
+
+```sh
 bun install
+```
 
-# run tests
+Run tests with:
+
+```sh
 bun test
+```
 
-# build NPM package
+You can build the package using:
+
+```sh
 bun run build.ts
 ```
+
+Note that we only export ESM modules, we do not have CommonJS support.
 
 ## Acknowledgements
 

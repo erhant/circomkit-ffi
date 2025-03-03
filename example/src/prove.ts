@@ -35,7 +35,7 @@ if (!existsSync(libPath)) {
 
 const circomkitFFI = new CircomkitFFIBun(libPath);
 
-const verifierKey: object = JSON.parse(readFileSync(circomkit.path.ofCircuit(circuitName, "vkey"), "utf-8"));
+// const verifierKey: object = JSON.parse(readFileSync(circomkit.path.ofCircuit(circuitName, "vkey"), "utf-8"));
 
 {
   console.info("Generating a proof with Arkworks");
