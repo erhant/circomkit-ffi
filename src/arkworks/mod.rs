@@ -88,79 +88,62 @@ pub fn prove_with_setup(
 mod tests {
     use super::*;
 
-    const CIRCUIT: &str = "mul30";
+    const CIRCUIT: &str = "multiplier_300";
 
-    fn check_snarkjs_output(snarkjs_out: &SnarkjsOutput, circuit_name: &str) -> eyre::Result<()> {
+    fn check_snarkjs_output(
+        snarkjs_out: &SnarkjsOutput,
+        dir: &Path,
+        circuit_name: &str,
+    ) -> eyre::Result<()> {
+        let proof_output_path = dir
+            .join(&format!("arkworks_{}_proof", circuit_name))
+            .with_extension("json");
+        let public_output_path = dir
+            .join(&format!("arkworks_{}_public", circuit_name))
+            .with_extension("json");
+        let vkey_path = dir.join("groth16_vkey").with_extension("json");
+
         std::fs::write(
-            &format!("tests/res/arkworks_{}_proof.json", circuit_name),
+            &proof_output_path,
             serde_json::to_string_pretty(&snarkjs_out.proof).unwrap(),
         )?;
         std::fs::write(
-            &format!("tests/res/arkworks_{}_public.json", circuit_name),
+            &public_output_path,
             serde_json::to_string_pretty(&snarkjs_out.public_signals).unwrap(),
         )?;
-
-        let output = snarkjs_verify_groth16(
-            &format!("tests/res/{}_groth16_vkey.json", circuit_name),
-            &format!("tests/res/arkworks_{}_public.json", circuit_name),
-            &format!("tests/res/arkworks_{}_proof.json", circuit_name),
-        )?;
+        let output = snarkjs_verify_groth16(&vkey_path, &proof_output_path, &public_output_path)?;
         assert!(output.status.success());
 
         Ok(())
     }
 
     #[tokio::test]
-    async fn test_arkworks_mul3_without_witness() -> eyre::Result<()> {
-        let wasm_path = format!("tests/res/{}.wasm", CIRCUIT);
-        let r1cs_path = format!("tests/res/{}.r1cs", CIRCUIT);
-        let pkey_path = format!("tests/res/{}_groth16.zkey", CIRCUIT);
+    async fn test_arkworks_without_witness() -> eyre::Result<()> {
+        let dir = Path::new("example/build").join(CIRCUIT);
+        let wasm_path = dir
+            .join(format!("{}_js", CIRCUIT))
+            .join(CIRCUIT)
+            .with_extension("wasm");
+        let r1cs_path = dir.join(CIRCUIT).with_extension("r1cs");
+        let pkey_path = dir.join("groth16_pkey").with_extension("zkey");
 
         // you can push same input few times, if its an array
-        let inputs = vec![
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 1),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-            ("in", 2),
-        ];
+        let inputs = vec![("in", 2); 300]; // TODO: !!!
 
         let snarkjs_out = prove_with_setup(r1cs_path, wasm_path, pkey_path, inputs);
-        check_snarkjs_output(&snarkjs_out, CIRCUIT)
+        check_snarkjs_output(&snarkjs_out, &dir, CIRCUIT)
     }
 
     #[tokio::test]
-    async fn test_arkworks_mul3_with_witness() -> eyre::Result<()> {
-        let r1cs_path = format!("tests/res/{}.r1cs", CIRCUIT);
-        let wtns_path = format!("tests/res/{}.wtns.json", CIRCUIT);
-        let pkey_path = format!("tests/res/{}_groth16.zkey", CIRCUIT);
+    async fn test_arkworks_with_witness() -> eyre::Result<()> {
+        let dir = Path::new("tests/res");
+        let r1cs_path = dir.join(CIRCUIT).with_extension("r1cs");
+        let wtns_path = dir.join(format!("{}.wtns", CIRCUIT)).with_extension("json");
+        let pkey_path = dir
+            .join(format!("{}_groth16", CIRCUIT))
+            .with_extension("zkey");
 
         let snarkjs_out = prove_with_existing_witness(r1cs_path, wtns_path, pkey_path);
-        check_snarkjs_output(&snarkjs_out, CIRCUIT)
+        check_snarkjs_output(&snarkjs_out, dir, CIRCUIT)
     }
 }

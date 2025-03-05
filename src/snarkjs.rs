@@ -1,3 +1,5 @@
+use std::ffi::OsStr;
+
 use serde::{Deserialize, Serialize};
 
 /// A Groth16 proof object, similar to how SnarkJS exports it.
@@ -61,16 +63,16 @@ impl std::fmt::Display for SnarkjsOutput {
 /// Requires `snarkjs` to be installed globally.
 #[inline]
 pub fn snarkjs_verify_groth16(
-    verification_key_path: &str,
-    proof_path: &str,
-    public_signals_path: &str,
+    verification_key_path: impl AsRef<OsStr>,
+    proof_path: impl AsRef<OsStr>,
+    public_signals_path: impl AsRef<OsStr>,
 ) -> std::io::Result<std::process::Output> {
     std::process::Command::new("snarkjs")
         .args([
-            "g16v", // short for "groth16 verify"
-            verification_key_path,
-            proof_path,
-            public_signals_path,
+            OsStr::new("g16v"), // short for "groth16 verify"
+            verification_key_path.as_ref(),
+            public_signals_path.as_ref(),
+            proof_path.as_ref(),
         ])
         .output()
 }
