@@ -69,6 +69,11 @@ pub fn compute_witness<F: PrimeField>(
 
     // compute witness i.e. building circuit with inputs
     let circom = builder.build()?;
+    println!(
+        "{} + {} + {}",
+        circom.r1cs.num_aux, circom.r1cs.num_inputs, circom.r1cs.num_variables,
+    );
+    println!("{}", circom.witness.as_ref().unwrap().len());
     debug_assert!(
         verify_constraints(circom.clone())?,
         "constraints not satisfied"
@@ -108,7 +113,7 @@ pub fn setup_circom_bn254_circuit(
 /// Creates a proof from a circuit with public inputs fed into.
 #[inline(always)]
 pub fn prove_circuit(
-    circuit: CircomCircuit<Fr>,
+    circuit: CircomCircuit<ark_bn254::Fr>,
     pkey: &ProvingKey<Bn254>,
 ) -> Result<Proof<Bn254>, SynthesisError> {
     Groth16::<Bn254, CircomReduction>::create_random_proof_with_reduction(

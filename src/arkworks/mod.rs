@@ -17,7 +17,7 @@ pub fn prove_with_existing_witness(
     pkey_path: impl AsRef<Path>,
 ) -> SnarkjsOutput {
     // if wtns path ends with JSON, use `load_witness_json`, otherwise, use `load_witness`
-    let wtns = if wtns_path.as_ref().ends_with(".json") {
+    let wtns = if wtns_path.as_ref().to_string_lossy().ends_with(".json") {
         load_witness_json(wtns_path).expect("could not load witness JSON")
     } else {
         load_witness(wtns_path).expect("could not load witness")
@@ -117,7 +117,38 @@ mod tests {
         let pkey_path = format!("tests/res/{}_groth16.zkey", CIRCUIT);
 
         // you can push same input few times, if its an array
-        let inputs = vec![("in", 2), ("in", 4), ("in", 10)];
+        let inputs = vec![
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 1),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+            ("in", 2),
+        ];
 
         let snarkjs_out = prove_with_setup(r1cs_path, wasm_path, pkey_path, inputs);
         check_snarkjs_output(&snarkjs_out, CIRCUIT)
@@ -125,8 +156,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_arkworks_mul3_with_witness() -> eyre::Result<()> {
-        let wtns_path = format!("tests/res/{}.wtns", CIRCUIT);
         let r1cs_path = format!("tests/res/{}.r1cs", CIRCUIT);
+        let wtns_path = format!("tests/res/{}.wtns.json", CIRCUIT);
         let pkey_path = format!("tests/res/{}_groth16.zkey", CIRCUIT);
 
         let snarkjs_out = prove_with_existing_witness(r1cs_path, wtns_path, pkey_path);

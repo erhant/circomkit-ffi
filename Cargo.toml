@@ -1,6 +1,6 @@
 [package]
 name = "circomkit-ffi"
-version = "0.0.2"
+version = "0.0.3"
 edition = "2021"
 license = "MIT"
 authors = ["erhant"]
@@ -20,7 +20,7 @@ lambdaworks-circom-adapter = { git = "https://github.com/erhant/lambdaworks", br
 lambdaworks-groth16 = { git = "https://github.com/erhant/lambdaworks", branch = "erhant/fix-circom-adapter" }
 
 # arkworks
-ark-circom = { git = "https://github.com/arkworks-rs/circom-compat" }
+ark-circom = { git = "https://github.com/arkworks-rs/circom-compat", rev = "3c95ed9" }
 ark-crypto-primitives = { version = "0.5.0" }
 ark-ec = { version = "0.5.0", default-features = false, features = [
   "parallel",

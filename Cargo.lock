@@ -88,7 +88,7 @@ dependencies = [
 [[package]]
 name = "ark-circom"
 version = "0.5.0"
-source = "git+https://github.com/arkworks-rs/circom-compat#3c95ed98e23a408b4d99a53e483a9bba39685a4e"
+source = "git+https://github.com/arkworks-rs/circom-compat?rev=3c95ed9#3c95ed98e23a408b4d99a53e483a9bba39685a4e"
 dependencies = [
  "ark-bn254",
  "ark-crypto-primitives",
@@ -581,7 +581,7 @@ dependencies = [
 
 [[package]]
 name = "circomkit-ffi"
-version = "0.0.2"
+version = "0.0.3"
 dependencies = [
  "ark-bn254",
  "ark-circom",
