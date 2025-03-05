@@ -12,7 +12,8 @@ impl From<&ArkworksProof> for SnarkjsGroth16Proof {
             ],
             pi_c: [proof.c.x.to_string(), proof.c.y.to_string()],
             protocol: "groth16".to_string(),
-            curve: "bn254".to_string(),
+            // SnarkJS accepts `bn254 | bn128 | altbn128` as all the same
+            curve: "bn128".to_string(),
         }
     }
 }

@@ -69,11 +69,11 @@ pub fn compute_witness<F: PrimeField>(
 
     // compute witness i.e. building circuit with inputs
     let circom = builder.build()?;
-    println!(
-        "{} + {} + {}",
-        circom.r1cs.num_aux, circom.r1cs.num_inputs, circom.r1cs.num_variables,
-    );
-    println!("{}", circom.witness.as_ref().unwrap().len());
+    // println!(
+    //     "{} + {} + {}",
+    //     circom.r1cs.num_aux, circom.r1cs.num_inputs, circom.r1cs.num_variables,
+    // );
+    println!("{:?}", circom.witness);
     debug_assert!(
         verify_constraints(circom.clone())?,
         "constraints not satisfied"
