@@ -23,9 +23,6 @@ pub fn prove_with_existing_witness(
         load_witness(wtns_path).expect("could not load witness")
     };
 
-    // print witness
-    println!("{:?}", wtns);
-
     let proving_key = load_proving_key(pkey_path).expect("could not load prover key");
     let r1cs = load_r1cs(r1cs_path).expect("could not load R1CS");
 
@@ -91,35 +88,8 @@ mod tests {
 
     const CIRCUIT: &str = "multiplier_30";
 
-    fn check_snarkjs_output(
-        snarkjs_out: &SnarkjsOutput,
-        dir: &Path,
-        circuit_name: &str,
-    ) -> eyre::Result<()> {
-        let proof_output_path = dir
-            .join(&format!("arkworks_{}_proof", circuit_name))
-            .with_extension("json");
-        let public_output_path = dir
-            .join(&format!("arkworks_{}_public", circuit_name))
-            .with_extension("json");
-        let vkey_path = dir.join("groth16_vkey").with_extension("json");
-
-        std::fs::write(
-            &proof_output_path,
-            serde_json::to_string_pretty(&snarkjs_out.proof).unwrap(),
-        )?;
-        std::fs::write(
-            &public_output_path,
-            serde_json::to_string_pretty(&snarkjs_out.public_signals).unwrap(),
-        )?;
-        let output = snarkjs_verify_groth16(&vkey_path, &proof_output_path, &public_output_path)?;
-        assert!(output.status.success());
-
-        Ok(())
-    }
-
     #[tokio::test]
-    async fn test_arkworks_without_witness() -> eyre::Result<()> {
+    async fn test_arkworks_with_computed_witness() -> eyre::Result<()> {
         let dir = Path::new("example/build").join(CIRCUIT);
         let wasm_path = dir
             .join(format!("{}_js", CIRCUIT))
@@ -132,11 +102,11 @@ mod tests {
         let inputs = vec![("in", 2); 300]; // TODO: !!!
 
         let snarkjs_out = prove_with_computed_witness(r1cs_path, wasm_path, pkey_path, inputs);
-        check_snarkjs_output(&snarkjs_out, &dir, CIRCUIT)
+        check_snarkjs_output(&snarkjs_out, &dir, CIRCUIT, "arkworks")
     }
 
     #[tokio::test]
-    async fn test_arkworks_with_witness() -> eyre::Result<()> {
+    async fn test_arkworks_with_existing_witness() -> eyre::Result<()> {
         let dir = Path::new("example/build").join(CIRCUIT);
         let r1cs_path = dir.join(CIRCUIT).with_extension("r1cs");
         let wtns_path = dir
@@ -146,6 +116,6 @@ mod tests {
         let pkey_path = dir.join("groth16_pkey").with_extension("zkey");
 
         let snarkjs_out = prove_with_existing_witness(r1cs_path, wtns_path, pkey_path);
-        check_snarkjs_output(&snarkjs_out, &dir, CIRCUIT)
+        check_snarkjs_output(&snarkjs_out, &dir, CIRCUIT, "arkworks")
     }
 }

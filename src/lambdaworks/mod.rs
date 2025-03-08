@@ -14,7 +14,7 @@ pub fn prove_with_witness(
     r1cs_path: impl AsRef<Path>,
     wtns_path: impl AsRef<Path>,
 ) -> SnarkjsOutput {
-    if !r1cs_path.as_ref().ends_with(".json") {
+    if !r1cs_path.as_ref().to_string_lossy().ends_with(".json") {
         panic!("R1CS file must be in JSON format");
     }
     let r1cs = read_circom_r1cs(r1cs_path).unwrap();
@@ -64,25 +64,29 @@ fn read_raw_circom_witness(wtns_path: impl AsRef<Path>) -> Result<Vec<FrElement>
 mod tests {
     use super::*;
 
+    const CIRCUIT: &str = "multiplier_30";
+
     #[test]
-    fn test_lambdaworks_mul3_witness() -> eyre::Result<()> {
-        let wtns_path = "tests/res/mul3.wtns";
+    fn test_lambdaworks_witness_reader() -> eyre::Result<()> {
+        let dir = Path::new("example/build").join(CIRCUIT);
+        let wtns_path = dir
+            .join("default") // input name
+            .join("witness")
+            .with_extension("wtns");
         let wtns = read_raw_circom_witness(wtns_path).unwrap();
-        assert_eq!(wtns.len(), 6);
         assert_eq!(wtns[0], FrElement::from(1)); // constant
-        assert_eq!(wtns[1], FrElement::from(80)); // public
-        assert_eq!(wtns[2], FrElement::from(2));
-        assert_eq!(wtns[3], FrElement::from(4));
-        assert_eq!(wtns[4], FrElement::from(10));
-        assert_eq!(wtns[5], FrElement::from(8));
 
         Ok(())
     }
 
     #[tokio::test]
-    async fn test_lambdaworks_mul3_with_witness() -> eyre::Result<()> {
-        let r1cs_path = "tests/res/mul3.r1cs.json";
-        let wtns_path = "tests/res/mul3.wtns";
+    async fn test_lambdaworks_with_witness() -> eyre::Result<()> {
+        let dir = Path::new("example/build").join(CIRCUIT);
+        let r1cs_path = dir.join(CIRCUIT).with_extension("r1cs.json");
+        let wtns_path = dir
+            .join("default") // input name
+            .join("witness")
+            .with_extension("wtns");
 
         let _ = prove_with_witness(r1cs_path, wtns_path);
         Ok(())

@@ -1,4 +1,4 @@
-use std::ffi::OsStr;
+use std::{ffi::OsStr, path::Path};
 
 use serde::{Deserialize, Serialize};
 
@@ -61,7 +61,6 @@ impl std::fmt::Display for SnarkjsOutput {
 /// If the process fails, this may panic.
 ///
 /// Requires `snarkjs` to be installed globally.
-#[inline]
 pub fn snarkjs_verify_groth16(
     verification_key_path: impl AsRef<OsStr>,
     proof_path: impl AsRef<OsStr>,
@@ -75,4 +74,38 @@ pub fn snarkjs_verify_groth16(
             proof_path.as_ref(),
         ])
         .output()
+}
+
+/// Checks the output of `snarkjs` by verifying the proof.
+///
+/// - If the verification fails, this function will panic.
+/// - The proof is saved as `{prefix}_{circuit_name}_proof.json`
+/// - The public signals are saved as `{prefix}_{circuit_name}_public.json`
+/// - The verification key expected from the disk as `groth16_vkey.json`
+pub fn check_snarkjs_output(
+    snarkjs_out: &SnarkjsOutput,
+    dir: &Path,
+    circuit_name: &str,
+    prefix: &str,
+) -> eyre::Result<()> {
+    let proof_output_path = dir
+        .join(&format!("{}_{}_proof", prefix, circuit_name))
+        .with_extension("json");
+    let public_output_path = dir
+        .join(&format!("{}_{}_public", prefix, circuit_name))
+        .with_extension("json");
+    let vkey_path = dir.join("groth16_vkey").with_extension("json");
+
+    std::fs::write(
+        &proof_output_path,
+        serde_json::to_string_pretty(&snarkjs_out.proof).unwrap(),
+    )?;
+    std::fs::write(
+        &public_output_path,
+        serde_json::to_string_pretty(&snarkjs_out.public_signals).unwrap(),
+    )?;
+    let output = snarkjs_verify_groth16(&vkey_path, &proof_output_path, &public_output_path)?;
+    assert!(output.status.success());
+
+    Ok(())
 }

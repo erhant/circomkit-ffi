@@ -73,7 +73,7 @@ pub fn compute_witness<F: PrimeField>(
     //     "{} + {} + {}",
     //     circom.r1cs.num_aux, circom.r1cs.num_inputs, circom.r1cs.num_variables,
     // );
-    println!("{:?}", circom.witness);
+    // println!("{:?}", circom.witness);
     debug_assert!(
         verify_constraints(circom.clone())?,
         "constraints not satisfied"
