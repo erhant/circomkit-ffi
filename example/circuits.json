@@ -13,5 +13,20 @@
     "file": "multiplier",
     "template": "Multiplier",
     "params": [300]
+  },
+  "multiplier_3000": {
+    "file": "multiplier",
+    "template": "Multiplier",
+    "params": [3000]
+  },
+  "multiplier_30000": {
+    "file": "multiplier",
+    "template": "Multiplier",
+    "params": [30000]
+  },
+  "multiplier_300000": {
+    "file": "multiplier",
+    "template": "Multiplier",
+    "params": [300000]
   }
 }
