@@ -28,10 +28,9 @@ fn test_rust_witness_multiplier_3() -> eyre::Result<()> {
 
     let mut inputs: HashMap<String, Vec<BigInt>> = HashMap::default();
     inputs.insert("in".into(), vec![2.into(), 4.into(), 10.into()]);
-    // The generated function will be the name of the circuit
-    // followed by _witness
+
+    // the generated function will be the circuit name followed by _witness
     let witness = mul3_witness(inputs);
-    println!("Witness: {:?}", witness);
 
     Ok(())
 }

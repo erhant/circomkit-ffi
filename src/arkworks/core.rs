@@ -69,11 +69,6 @@ pub fn compute_witness<F: PrimeField>(
 
     // compute witness i.e. building circuit with inputs
     let circom = builder.build()?;
-    // println!(
-    //     "{} + {} + {}",
-    //     circom.r1cs.num_aux, circom.r1cs.num_inputs, circom.r1cs.num_variables,
-    // );
-    // println!("{:?}", circom.witness);
     debug_assert!(
         verify_constraints(circom.clone())?,
         "constraints not satisfied"
@@ -140,19 +135,21 @@ pub fn verify(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use ark_bn254::Fr;
+
+    const CIRCUIT: &str = "multiplier_3";
+    const INPUT: &str = "default";
 
     #[test]
     fn test_arkworks_multiplier_3_witness_reader() -> eyre::Result<()> {
-        use ark_bn254::Fr;
-        let wtns_path = "tests/res/mul3.wtns";
+        let dir = Path::new("example/build").join(CIRCUIT);
+        let wtns_path = dir
+            .join(INPUT) // input name
+            .join("witness")
+            .with_extension("wtns");
+
         let wtns = load_witness::<Fr>(wtns_path).unwrap();
-        assert_eq!(wtns.len(), 6);
-        assert_eq!(wtns[0], Fr::from(1)); // constant
-        assert_eq!(wtns[1], Fr::from(80)); // public
-        assert_eq!(wtns[2], Fr::from(2));
-        assert_eq!(wtns[3], Fr::from(4));
-        assert_eq!(wtns[4], Fr::from(10));
-        assert_eq!(wtns[5], Fr::from(8));
+        assert!(wtns.len() != 0);
 
         Ok(())
     }

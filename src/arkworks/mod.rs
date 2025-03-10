@@ -24,12 +24,16 @@ pub fn prove_with_existing_witness(
     };
 
     let proving_key = load_proving_key(pkey_path).expect("could not load prover key");
-    let r1cs = load_r1cs(r1cs_path).expect("could not load R1CS");
+    let mut r1cs = load_r1cs(r1cs_path).expect("could not load R1CS");
+
+    // disable the wire mapping, otherwise you may get out-of-index errors; this is how Arkworks does it
+    // for witnesses generated via WASM runtime, see: https://github.com/arkworks-rs/circom-compat/blob/master/src/circom/builder.rs#L82
+    r1cs.wire_mapping = None;
 
     // construct the circuit with explicit witness
     let circom = CircomCircuit {
         r1cs,
-        witness: Some(wtns), // FIXME: doing this is likely breaking the prover logic
+        witness: Some(wtns),
     };
 
     let public_inputs = circom
@@ -37,7 +41,7 @@ pub fn prove_with_existing_witness(
         .expect("could not get public inputs, is witness computed?");
     let proof = prove_circuit(circom, &proving_key).unwrap();
     debug_assert!(
-        matches!(verify(&proof, &public_inputs, &proving_key), Ok(true)),
+        verify(&proof, &public_inputs, &proving_key).is_ok_and(|b| b),
         "proof is not accepted"
     );
 
@@ -62,7 +66,6 @@ pub fn prove_with_computed_witness(
 
     // construct the circuit with explicit witness
     let circom = compute_witness(config, inputs).expect("could not compute witness");
-
     let proving_key = load_proving_key(pkey_path).expect("could not load prover key");
     let public_inputs = circom
         .get_public_inputs()

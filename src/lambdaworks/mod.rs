@@ -31,13 +31,6 @@ pub fn prove_with_witness(
     let (proving_key, verifying_key) = lambdaworks_groth16::setup(&qap);
     let proof = lambdaworks_groth16::Prover::prove(&wtns, &qap, &proving_key);
 
-    // println!(
-    //     "{:#?}",
-    //     wtns.iter()
-    //         .map(|s| s.representative().to_string())
-    //         .collect::<Vec<_>>()
-    // );
-
     debug_assert!(
         lambdaworks_groth16::verify(&verifying_key, &proof, &pubs),
         "proof is not accepted"
