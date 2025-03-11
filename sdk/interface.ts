@@ -23,7 +23,7 @@ export interface ProverBackend {
    * @param wtnsPath witness file path (`.json` or `.wtns.json`)
    * @param r1csPath r1cs file path (`.r1cs`)
    * @param zkeyPath proving key file path (`.zkey`)
-   * @returns SnarkJS Groth16 proof & public signals TODO: return object here
+   * @returns SnarkJS Groth16 proof & public signals
    */
   arkworks_prove(
     wtnsPath: string,
@@ -36,7 +36,7 @@ export interface ProverBackend {
    *
    * @param wtnsPath witness file path (`.json` or `.wtns.json`)
    * @param r1csPath r1cs file path (`.r1cs`)
-   * @returns SnarkJS Groth16 proof & public signals TODO: return object here
+   * @returns SnarkJS Groth16 proof & public signals
    */
   lambdaworks_prove(wtnsPath: string, r1csPath: string): ProofWithPublicSignals;
 }

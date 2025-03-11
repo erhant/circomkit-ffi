@@ -4,6 +4,7 @@ import {
   type close as ffiClose,
   type load as ffiLoad,
 } from "ffi-rs";
+
 import type { ProofWithPublicSignals, ProverBackend } from "./interface";
 
 const DataTypeString = 0 satisfies DataType.String;

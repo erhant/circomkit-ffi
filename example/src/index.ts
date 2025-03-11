@@ -18,7 +18,8 @@ if (!existsSync(libPath)) {
 }
 
 console.log("Using FFI library at", libPath, "for", isBun() ? "Bun" : "Node");
-const circomkitFFI = isBun() ? new CircomkitFFIBun(libPath) : new CircomkitFFINode(libPath, open, close, load);
+// const circomkitFFI =  new CircomkitFFIBun(libPath)
+const circomkitFFI = new CircomkitFFINode(libPath, open, close, load);
 
 // const verifierKey: object = JSON.parse(readFileSync(circomkit.path.ofCircuit(circuitName, "vkey"), "utf-8"));
 
