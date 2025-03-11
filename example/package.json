@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "circomkit": "^0.3.2",
-    "circomkit-ffi": "^0.0.6",
+    "circomkit-ffi": "^0.0.7",
     "ffi-rs": "^1.2.6",
     "snarkjs": "^0.7.5"
   },
