@@ -10,8 +10,9 @@
     // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    // "verbatimModuleSyntax": false,
     "noEmit": true,
+    // FIXME: having this `true` causes interface.ts to be omitted?
+    // "verbatimModuleSyntax": false,
 
     // Best practices
     "strict": true,

@@ -115,6 +115,10 @@ bun run build.ts
 
 Note that we only export ESM modules, we do not have CommonJS support.
 
+## Benchmarks
+
+See the [`bench`](./bench/) folder.
+
 ## Acknowledgements
 
 This project is kindly supported by [Soulforge zkBankai](https://soulforge.zkbankai.com/) grant, with the application [here](https://github.com/zk-bankai/soulforge/blob/main/applications/circomkit-bunffi.md).

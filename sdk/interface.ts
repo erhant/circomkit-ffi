@@ -8,6 +8,8 @@ export type ProofWithPublicSignals = {
 export interface ProverBackend {
   /** The path to the shared library. */
   path: string;
+  /** Name of the FFI library used. */
+  ffiName: string;
 
   /**
    * A diagnostic function, returns the given input back.

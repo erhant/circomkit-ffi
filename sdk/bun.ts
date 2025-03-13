@@ -10,6 +10,8 @@ import { isBun } from "./common";
  * @implements ProverBackend
  */
 export class CircomkitFFIBun implements ProverBackend {
+  ffiName: string = "bun:ffi";
+
   constructor(
     /** Path to the library, */
     readonly path: string

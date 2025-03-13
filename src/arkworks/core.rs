@@ -137,11 +137,11 @@ mod tests {
     use super::*;
     use ark_bn254::Fr;
 
-    const CIRCUIT: &str = "multiplier_3";
+    const CIRCUIT: &str = "multiplier_30";
     const INPUT: &str = "default";
 
     #[test]
-    fn test_arkworks_multiplier_3_witness_reader() -> eyre::Result<()> {
+    fn test_arkworks_witness_reader() -> eyre::Result<()> {
         let dir = Path::new("example/build").join(CIRCUIT);
         let wtns_path = dir
             .join(INPUT) // input name

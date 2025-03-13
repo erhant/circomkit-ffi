@@ -28,6 +28,8 @@ const DataTypeString = 0 satisfies DataType.String;
  * @implements ProverBackend
  */
 export class CircomkitFFINode implements ProverBackend {
+  ffiName: string = "ffi-rs";
+
   readonly LIBRARY_NAME = "libcircomkit_ffi";
 
   /** Whether the `lib` is open. */
