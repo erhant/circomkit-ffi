@@ -44,19 +44,25 @@ pub extern "C" fn arkworks_prove(
         });
 
     // due to internals of Arkworks we need `tokio` runtime even if nothing is async within the thread
-    let snarkjs_out = tokio::runtime::Builder::new_current_thread()
+    match tokio::runtime::Builder::new_current_thread()
         .enable_io()
         .build()
         .unwrap()
-        .block_on(async { arkworks::prove_with_existing_witness(r1cs_path, wtns_path, pkey_path) });
-
-    let output = serde_json::to_string_pretty(&snarkjs_out).unwrap();
-    CString::new(output).unwrap()
+        .block_on(async { arkworks::prove_with_existing_witness(r1cs_path, wtns_path, pkey_path) })
+    {
+        Ok(snarkjs_out) => {
+            let output = serde_json::to_string_pretty(&snarkjs_out).unwrap();
+            CString::new(output).unwrap()
+        }
+        Err(e) => {
+            panic!("Error: {:?}", e);
+        }
+    }
 }
 
 /// Generate a Lambdaworks proof from a given witness, R1CS.
 ///
-/// It creates its own prover key within. TODO: allow for external prover key.
+/// It creates its own prover key within.
 #[no_mangle]
 #[allow(improper_ctypes_definitions)]
 pub extern "C" fn lambdaworks_prove(
@@ -72,8 +78,13 @@ pub extern "C" fn lambdaworks_prove(
         .unwrap()
     });
 
-    let snarkjs_out = lambdaworks::prove_with_witness(r1cs_path, wtns_path);
-
-    let output = serde_json::to_string_pretty(&snarkjs_out).unwrap();
-    CString::new(output).unwrap()
+    match lambdaworks::prove_with_witness(r1cs_path, wtns_path) {
+        Ok(snarkjs_out) => {
+            let output = serde_json::to_string_pretty(&snarkjs_out).unwrap();
+            CString::new(output).unwrap()
+        }
+        Err(e) => {
+            panic!("Error: {:?}", e);
+        }
+    }
 }

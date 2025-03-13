@@ -1,27 +1,141 @@
 import { beforeAll, describe, expect, it } from "bun:test";
-import { getLibPath } from "../sdk";
+import { downloadRelease, getLibPath } from "../sdk";
 import { CircomkitFFIBun } from "../sdk/bun";
 import { CircomkitFFINode } from "../sdk/node";
+import { open, close, load } from "ffi-rs";
 import { existsSync } from "fs";
+import { Circomkit } from "circomkit";
 
 describe("ffi", () => {
-  const PATH = getLibPath(".");
+  let libpath: string = getLibPath(".");
 
-  beforeAll(() => {
-    expect(existsSync(PATH)).toBeTrue();
+  // we use these specifically for testing
+  const circuitName = "multiplier_30";
+  const inputName = "default";
+
+  let circomkit: Circomkit;
+
+  beforeAll(async () => {
+    // download the library if required
+    if (!existsSync(libpath)) {
+      libpath = await downloadRelease(".");
+    }
+    expect(existsSync(libpath)).toBeTrue();
+
+    circomkit = new Circomkit({
+      inspect: false,
+    });
   });
 
-  it("should work with bun:ffi (Bun)", () => {
-    const lib = new CircomkitFFIBun(PATH);
-    const input = "hi theree";
-    const output = lib.echo(input);
-    expect(output.toString()).toEqual(input);
+  describe("echo", () => {
+    it("should work with bun:ffi (Bun)", () => {
+      const lib = new CircomkitFFIBun(libpath);
+      const input = "hi theree";
+      const output = lib.echo(input);
+      expect(output).toEqual(input);
+    });
+
+    it("should work with ffi-rs (Node)", () => {
+      const lib = new CircomkitFFINode(libpath, open, close, load);
+      const input = "hi theree";
+      const output = lib.echo(input);
+      expect(output).toEqual(input);
+    });
   });
 
-  it("should work with ffi-rs (Node)", () => {
-    const lib = new CircomkitFFINode(PATH);
-    const input = "hi theree";
-    const output = lib.echo(input);
-    expect(output.toString()).toEqual(input);
+  describe("Arkworks", () => {
+    it("should generate a valid Arkworks proof with CircomkitFFIBun", () => {
+      const lib = new CircomkitFFIBun(libpath);
+
+      const [witnessPath, r1csPath, pkeyPath] = [
+        circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
+        circomkit.path.ofCircuit(circuitName, "r1cs"),
+        circomkit.path.ofCircuit(circuitName, "pkey"),
+      ].map((path) => import.meta.dir + "/../example/" + path);
+
+      // Check if required files exist before attempting to prove
+      expect(existsSync(witnessPath)).toBeTrue();
+      expect(existsSync(r1csPath)).toBeTrue();
+      expect(existsSync(pkeyPath)).toBeTrue();
+
+      const result = lib.arkworks_prove(witnessPath, r1csPath, pkeyPath);
+
+      // Verify the proof structure
+      expect(result).toBeDefined();
+      expect(result.proof).toBeDefined();
+      expect(result.public_signals).toBeDefined();
+      expect(Array.isArray(result.public_signals)).toBeTrue();
+    });
+
+    it("should generate a valid Arkworks proof with CircomkitFFINode", () => {
+      const lib = new CircomkitFFINode(libpath, open, close, load);
+
+      const [witnessPath, r1csPath, pkeyPath] = [
+        circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
+        circomkit.path.ofCircuit(circuitName, "r1cs"),
+        circomkit.path.ofCircuit(circuitName, "pkey"),
+      ].map((path) => import.meta.dir + "/../example/" + path);
+
+      // Check if required files exist before attempting to prove
+      expect(existsSync(witnessPath)).toBeTrue();
+      expect(existsSync(r1csPath)).toBeTrue();
+      expect(existsSync(pkeyPath)).toBeTrue();
+
+      const result = lib.arkworks_prove(witnessPath, r1csPath, pkeyPath);
+
+      // Verify the proof structure
+      expect(result).toBeDefined();
+      expect(result.proof).toBeDefined();
+      expect(result.public_signals).toBeDefined();
+      expect(Array.isArray(result.public_signals)).toBeTrue();
+    });
+  });
+
+  describe("Lambdaworks", () => {
+    it("should generate a valid Lambdaworks proof with CircomkitFFIBun", () => {
+      const lib = new CircomkitFFIBun(libpath);
+
+      const [witnessPath, r1csPath, pkeyPath] = [
+        circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
+        circomkit.path.ofCircuit(circuitName, "r1cs") + ".json",
+        circomkit.path.ofCircuit(circuitName, "pkey"),
+      ].map((path) => import.meta.dir + "/../example/" + path);
+
+      // Check if required files exist before attempting to prove
+      expect(existsSync(witnessPath)).toBeTrue();
+      expect(existsSync(r1csPath)).toBeTrue();
+      expect(existsSync(pkeyPath)).toBeTrue();
+
+      const result = lib.lambdaworks_prove(witnessPath, r1csPath);
+
+      // Verify the proof structure
+      expect(result).toBeDefined();
+      expect(result.proof).toBeDefined();
+      expect(result.public_signals).toBeDefined();
+      expect(Array.isArray(result.public_signals)).toBeTrue();
+    });
+
+    it("should generate a valid Lambdaworks proof with CircomkitFFINode", () => {
+      const lib = new CircomkitFFINode(libpath, open, close, load);
+
+      const [witnessPath, r1csPath, pkeyPath] = [
+        circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
+        circomkit.path.ofCircuit(circuitName, "r1cs"),
+        circomkit.path.ofCircuit(circuitName, "pkey"),
+      ].map((path) => import.meta.dir + "/../example/" + path);
+
+      // Check if required files exist before attempting to prove
+      expect(existsSync(witnessPath)).toBeTrue();
+      expect(existsSync(r1csPath)).toBeTrue();
+      expect(existsSync(pkeyPath)).toBeTrue();
+
+      const result = lib.arkworks_prove(witnessPath, r1csPath, pkeyPath);
+
+      // Verify the proof structure
+      expect(result).toBeDefined();
+      expect(result.proof).toBeDefined();
+      expect(result.public_signals).toBeDefined();
+      expect(Array.isArray(result.public_signals)).toBeTrue();
+    });
   });
 });

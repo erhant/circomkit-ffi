@@ -51,11 +51,11 @@ export class CircomkitFFINode implements ProverBackend {
       funcName: "echo",
       paramsType: [DataTypeString],
       retType: DataTypeString,
-      paramsValue: [input],
+      paramsValue: [Buffer.from(input).toString("utf8")],
     });
     this.closeIfOpen();
 
-    return result;
+    return this.decodeResult(result);
   }
 
   arkworks_prove(
@@ -69,7 +69,9 @@ export class CircomkitFFINode implements ProverBackend {
       funcName: "arkworks_prove",
       paramsType: [DataTypeString, DataTypeString, DataTypeString],
       retType: DataTypeString,
-      paramsValue: [wtnsPath, r1csPath, pkeyPath],
+      paramsValue: [wtnsPath, r1csPath, pkeyPath].map((x) =>
+        Buffer.from(x, "utf16le").toString("utf8")
+      ),
     });
     this.closeIfOpen();
 
@@ -80,13 +82,20 @@ export class CircomkitFFINode implements ProverBackend {
     wtnsPath: string,
     r1csPath: string
   ): ProofWithPublicSignals {
+    // make sure r1cs path is JSON
+    if (!r1csPath.endsWith(".json")) {
+      throw new Error("r1csPath must be a JSON file");
+    }
+
     this.openIfClosed();
     const result = this.load({
       library: this.LIBRARY_NAME,
       funcName: "lambdaworks_prove",
       paramsType: [DataTypeString, DataTypeString],
       retType: DataTypeString,
-      paramsValue: [wtnsPath, r1csPath],
+      paramsValue: [wtnsPath, r1csPath].map((x) =>
+        Buffer.from(x, "utf16le").toString("utf8")
+      ),
     });
     this.closeIfOpen();
 
@@ -110,6 +119,15 @@ export class CircomkitFFINode implements ProverBackend {
       this.close(this.LIBRARY_NAME);
       this.isOpen = false;
     }
+  }
+
+  /** `ffi-rs` returns the strings as null-terminated (`\u0000`) UTF16
+   * strings, so we need to convert them to UTF8 strings.
+   */
+  private decodeResult(result: string): string {
+    return Buffer.from(result, "utf16le")
+      .toString("utf8")
+      .replace(/\u0000$/g, "");
   }
 
   // additional safety measure

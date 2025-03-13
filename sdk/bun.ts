@@ -60,6 +60,11 @@ export class CircomkitFFIBun implements ProverBackend {
     wtnsPath: string,
     r1csPath: string
   ): ProofWithPublicSignals {
+    // make sure r1cs path is JSON
+    if (!r1csPath.endsWith(".json")) {
+      throw new Error("r1csPath must be a JSON file");
+    }
+
     const {
       symbols: { lambdaworks_prove },
     } = dlopen(this.path, {

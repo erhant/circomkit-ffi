@@ -1,13 +1,13 @@
 [package]
 name = "circomkit-ffi"
-version = "0.0.4"
+version = "0.0.5"
 edition = "2021"
 license = "MIT"
 authors = ["erhant"]
 description = "Static libraries for Circom provers"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]
 
 [features]
 # only enable the witness-gen feature for witness generation functionality

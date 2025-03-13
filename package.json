@@ -1,7 +1,7 @@
 {
   "name": "circomkit-ffi",
   "type": "module",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -15,6 +15,7 @@
     "@types/bun": "latest",
     "@types/node": "^22.13.5",
     "@types/snarkjs": "^0.7.9",
+    "circomkit": "^0.3.2",
     "jest": "^29.7.0",
     "oxc-transform": "^0.53.0",
     "snarkjs": "^0.7.5"

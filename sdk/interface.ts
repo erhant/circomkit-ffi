@@ -2,7 +2,7 @@ import type { Groth16Proof, PublicSignals } from "snarkjs";
 
 export type ProofWithPublicSignals = {
   proof: Groth16Proof;
-  publicSignals: PublicSignals;
+  public_signals: PublicSignals;
 };
 
 export interface ProverBackend {

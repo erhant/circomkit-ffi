@@ -1,5 +1,6 @@
 use std::path::Path;
 
+use eyre::{eyre, Context};
 use lambdaworks_circom_adapter::*;
 use lambdaworks_groth16::common::FrElement;
 use lambdaworks_math::traits::ByteConversion;
@@ -13,17 +14,26 @@ mod snarkjs;
 pub fn prove_with_witness(
     r1cs_path: impl AsRef<Path>,
     wtns_path: impl AsRef<Path>,
-) -> SnarkjsOutput {
-    if !r1cs_path.as_ref().to_string_lossy().ends_with(".json") {
+) -> eyre::Result<SnarkjsOutput> {
+    let wtns_path = wtns_path.as_ref();
+    let r1cs_path = r1cs_path.as_ref();
+
+    if !r1cs_path.to_string_lossy().ends_with(".json") {
         panic!("R1CS file must be in JSON format");
     }
     let r1cs = read_circom_r1cs(r1cs_path).unwrap();
 
     // if wtns path ends with JSON, use `load_witness_json`, otherwise, use `load_witness`
-    let wtns = if wtns_path.as_ref().ends_with(".json") {
-        read_circom_witness(wtns_path).expect("could not load witness JSON")
+    let wtns = if wtns_path.ends_with(".json") {
+        read_circom_witness(wtns_path).map_err(|e| {
+            eyre!(
+                "could not load witness JSON from {}: {:?}",
+                wtns_path.display(),
+                e
+            )
+        })?
     } else {
-        read_raw_circom_witness(wtns_path).expect("could not load witness")
+        read_raw_circom_witness(wtns_path).wrap_err("could not load witness")?
     };
 
     let (qap, wtns, pubs) = circom_to_lambda(r1cs, wtns);
@@ -40,10 +50,10 @@ pub fn prove_with_witness(
     let snarkjs_public_inputs = SnarkjsPublicInputs::from_lambdaworks(pubs);
     // TODO: export verifying key from Lambda as well for this to work with snarkjs
 
-    SnarkjsOutput {
+    Ok(SnarkjsOutput {
         proof: snarkjs_proof,
         public_signals: snarkjs_public_inputs,
-    }
+    })
 }
 
 /// Like `read_raw_circom_witness`, but actually reads raw witness file instead of JSON.

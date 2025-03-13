@@ -12,7 +12,9 @@ function getDtsBunPlugin(): BunPlugin {
       if (builder.config.root && builder.config.outdir) {
         const rootPath = Bun.pathToFileURL(builder.config.root).pathname;
         const outPath = Bun.pathToFileURL(builder.config.outdir).pathname;
+
         builder.onStart(() => wroteTrack.clear());
+
         builder.onLoad({ filter: /\.ts$/ }, async (args) => {
           if (args.path.startsWith(rootPath) && !wroteTrack.has(args.path)) {
             wroteTrack.add(args.path);
@@ -27,6 +29,7 @@ function getDtsBunPlugin(): BunPlugin {
               code
             );
           }
+
           return undefined;
         });
       }

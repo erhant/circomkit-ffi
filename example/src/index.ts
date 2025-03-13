@@ -1,8 +1,12 @@
 import { Circomkit } from "circomkit";
-import { CircomkitFFIBun, CircomkitFFINode, downloadRelease, getLibPath, isBun } from "circomkit-ffi";
+import { downloadRelease, getLibPath, isBun } from "circomkit-ffi";
+// import { CircomkitFFIBun as CircomkitFFI } from "circomkit-ffi/bun";
+import { CircomkitFFINode as CircomkitFFI } from "circomkit-ffi/node";
 import { open, load, close } from "ffi-rs";
 import { existsSync, readFileSync } from "fs";
+import path from "path";
 import * as snarkjs from "snarkjs";
+import { fileURLToPath } from "url";
 
 const BUILD_CIRCUIT = false;
 
@@ -11,19 +15,22 @@ const circomkit = new Circomkit({
 });
 
 // download the FFI library if it doesn't exist
-const libPath = getLibPath(import.meta.dir);
+const thisPath = path.dirname(fileURLToPath(import.meta.url));
+const libPath = getLibPath(thisPath);
 if (!existsSync(libPath)) {
   console.info("Downloading FFI library.");
-  await downloadRelease(import.meta.dir);
+  await downloadRelease(thisPath);
 }
 
 console.log("Using FFI library at", libPath, "for", isBun() ? "Bun" : "Node");
-// const circomkitFFI =  new CircomkitFFIBun(libPath)
-const circomkitFFI = new CircomkitFFINode(libPath, open, close, load);
+// const circomkitFFI = new CircomkitFFI(libPath);
+const circomkitFFI = new CircomkitFFI(libPath, open, close, load);
 
+// echo test
+console.log(circomkitFFI.echo("Hello, world!"));
 // const verifierKey: object = JSON.parse(readFileSync(circomkit.path.ofCircuit(circuitName, "vkey"), "utf-8"));
 
-for (const N of [3, 30, 300, 3000, 30000, 300000]) {
+for (const N of [3, 30 /* 300, 3000, 30000, 300000 */]) {
   const IN = Array.from({ length: N }, (_, i) => i + 1);
   const circuitName = `multiplier_${N}`;
   const inputName = "default";
