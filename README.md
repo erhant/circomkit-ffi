@@ -6,15 +6,18 @@
 </p>
 
 <p align="center">
+  <a href="https://github.com/erhant/circomkit-ffi/releases/latest" target="_blank">
+    <img alt="Release" src="https://img.shields.io/github/v/release/erhant/circomkit-ffi?logo=github&label=lib">
+  </a>
   <a href="https://www.npmjs.com/package/circomkit-ffi" target="_blank">
-        <img alt="NPM" src="https://img.shields.io/npm/v/circomkit-ffi?logo=npm&color=CB3837">
-    </a>
-    <a href="./.github/workflows/test-lib.yml" target="_blank">
-        <img alt="Workflow: Tests" src="https://github.com/erhant/circomkit-ffi/actions/workflows/test-lib.yaml/badge.svg?branch=main">
-    </a>
-    <a href="https://opensource.org/licenses/MIT" target="_blank">
-        <img src="https://img.shields.io/badge/license-MIT-blue.svg">
-    </a>
+      <img alt="NPM" src="https://img.shields.io/npm/v/circomkit-ffi?logo=npm&color=CB3837&label=sdk">
+  </a>
+  <a href="./.github/workflows/test-lib.yml" target="_blank">
+      <img alt="Workflow: Tests" src="https://github.com/erhant/circomkit-ffi/actions/workflows/test-lib.yaml/badge.svg?branch=main">
+  </a>
+  <a href="https://opensource.org/licenses/MIT" target="_blank">
+      <img src="https://img.shields.io/badge/license-MIT-blue.svg">
+  </a>
 </p>
 
 This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. It features prover backends via [Lambdaworks](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter) Circom adapter for **Groth16** over **BLS12-381** and [Arkworks](https://github.com/arkworks-rs/circom-compat) Circom adapter for **Groth16** over **BN254**. It also provides [SnarkJS](https://github.com/iden3/snarkjs) exports for both prover backends, to export proof objects and public signals.
