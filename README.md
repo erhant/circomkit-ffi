@@ -40,7 +40,7 @@ The library will be automatically downloaded when required by the SDK.
 
 The SDK exposes two types of classes:
 
-- `CircomkitFFIBun` uses [`bun:ffi`](https://bun.sh/docs/api/ffi) and must be used within a Bun runtime.
+- `CircomkitFFIBun` is exported at `/circomkit-ffi/bun` and uses [`bun:ffi`](https://bun.sh/docs/api/ffi) and must be used within a Bun runtime.
 - `CircomkitFFINode` uses [`ffi-rs`](https://github.com/zhangyuang/node-ffi-rs/) and can be used by both Bun and Node.
 
 > [!NOTE]
@@ -50,6 +50,41 @@ The SDK exposes two types of classes:
 > ```sh
 > npm install ffi-rs
 > ```
+
+### Downloading the library
+
+First you need to download the library suited to your machine. We provide some utilities for this:
+
+```ts
+import { downloadRelease, getLibPath } from "circomkit-ffi";
+import { existsSync } from "fs";
+
+// you can point to any directory for the library to be downloaded at:
+const libDir = "~/path/to/somewhere";
+
+// you can get the path to library with `getLibPath`, it will attach the machine information to the file,
+// e.g.: on MacOS & Apple Silicon it will be:
+//   ~/path/to/somewhere/libcircomkit_ffi-macOS-arm64.dylib
+const libPath = getLibPath(libDir);
+
+// now we can download if needed
+if (!existsSync(libPath)) {
+  console.info("Downloading FFI library.");
+  await downloadRelease(libDir);
+}
+```
+
+### Preparing Node SDK
+
+<!-- // TODO: !!! -->
+
+### Preparing Bun SDK
+
+<!-- // TODO: !!! -->
+
+### Using the SDK
+
+<!-- // TODO: !!! -->
 
 ## Development
 
