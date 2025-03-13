@@ -8,7 +8,7 @@ on:
       - "tests/**"
       - "Cargo.toml"
       - "Cargo.lock"
-      - ".github/workflows/test.yaml"
+      - ".github/workflows/test-lib.yaml"
 
 env:
   CARGO_TERM_COLOR: always
