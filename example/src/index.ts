@@ -3,12 +3,17 @@ import { downloadRelease, getLibPath, isBun } from "circomkit-ffi";
 // import { CircomkitFFIBun } from "circomkit-ffi/bun";
 import { CircomkitFFINode } from "circomkit-ffi/node";
 import { open, load, close } from "ffi-rs"; // used by CircomkitFFINode
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import path from "path";
 import * as snarkjs from "snarkjs";
 import { fileURLToPath } from "url";
 
+// set this to `true` if you would like to build the circuits as well
 const BUILD_CIRCUIT = false;
+
+// this is used by snarkjs prover function,
+// must be explicity set to use single thread when the runtime is Bun
+const USE_SINGLE_THREAD = isBun() ? { singleThread: true } : undefined;
 
 const circomkit = new Circomkit({
   inspect: false,
@@ -44,20 +49,34 @@ for (const circomkitFFI of [
     console.info("Doing warm-up iterations...");
     const warmUpCircuit = "multiplier_3";
     const warmupInput = "default";
-    circomkitFFI.arkworks_prove(
+
+    // load verification key as well
+    const vk = JSON.parse(readFileSync(circomkit.path.ofCircuit(warmUpCircuit, "vkey"), "utf-8"));
+
+    // generate with arkworks
+    const { proof, publicSignals } = circomkitFFI.arkworks_prove(
       circomkit.path.ofCircuitWithInput(warmUpCircuit, warmupInput, "wtns"),
       circomkit.path.ofCircuit(warmUpCircuit, "r1cs"),
       circomkit.path.ofCircuit(warmUpCircuit, "pkey")
     );
+    // verify Arkworks proof (only if not Bun, because it fails due to some worker error)
+    if (!isBun()) {
+      const ok = await snarkjs.groth16.verify(vk, publicSignals, proof, USE_SINGLE_THREAD);
+      if (!ok) {
+        throw new Error("Verification failed");
+      }
+    }
+
+    // generate with snarkjs
     await snarkjs.groth16.prove(
       circomkit.path.ofCircuit(warmUpCircuit, "pkey"),
       circomkit.path.ofCircuitWithInput(warmUpCircuit, warmupInput, "wtns"),
       undefined,
-      { singleThread: true }
+      USE_SINGLE_THREAD
     );
   }
 
-  for (const N of [3, 30, 300 /* 3000, 30000, 300000 */]) {
+  for (const N of [3, 30, 300, 3000, 30000, 300000]) {
     const IN = Array.from({ length: N }, (_, i) => i + 1);
     const circuitName = `multiplier_${N}`;
     const inputName = "default";
@@ -112,7 +131,7 @@ for (const circomkitFFI of [
           circomkit.path.ofCircuit(circuitName, "pkey"),
           circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
           undefined,
-          isBun() ? { singleThread: true } : undefined
+          USE_SINGLE_THREAD
         );
         const end = performance.now();
         times.push(end - start);
