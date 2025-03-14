@@ -1,10 +1,11 @@
 import { beforeAll, describe, expect, it } from "bun:test";
+import { existsSync } from "fs";
+import { open, close, load } from "ffi-rs";
+import { Circomkit } from "circomkit";
+
 import { downloadRelease, getLibPath } from "../sdk";
 import { CircomkitFFIBun } from "../sdk/bun";
 import { CircomkitFFINode } from "../sdk/node";
-import { open, close, load } from "ffi-rs";
-import { existsSync } from "fs";
-import { Circomkit } from "circomkit";
 
 describe("ffi", () => {
   let libpath: string = getLibPath(".");
@@ -63,8 +64,8 @@ describe("ffi", () => {
       // Verify the proof structure
       expect(result).toBeDefined();
       expect(result.proof).toBeDefined();
-      expect(result.public_signals).toBeDefined();
-      expect(Array.isArray(result.public_signals)).toBeTrue();
+      expect(result.publicSignals).toBeDefined();
+      expect(Array.isArray(result.publicSignals)).toBeTrue();
     });
 
     it("should generate a valid Arkworks proof with CircomkitFFINode", () => {
@@ -86,8 +87,8 @@ describe("ffi", () => {
       // Verify the proof structure
       expect(result).toBeDefined();
       expect(result.proof).toBeDefined();
-      expect(result.public_signals).toBeDefined();
-      expect(Array.isArray(result.public_signals)).toBeTrue();
+      expect(result.publicSignals).toBeDefined();
+      expect(Array.isArray(result.publicSignals)).toBeTrue();
     });
   });
 
@@ -111,8 +112,8 @@ describe("ffi", () => {
       // Verify the proof structure
       expect(result).toBeDefined();
       expect(result.proof).toBeDefined();
-      expect(result.public_signals).toBeDefined();
-      expect(Array.isArray(result.public_signals)).toBeTrue();
+      expect(result.publicSignals).toBeDefined();
+      expect(Array.isArray(result.publicSignals)).toBeTrue();
     });
 
     it("should generate a valid Lambdaworks proof with CircomkitFFINode", () => {
@@ -134,8 +135,8 @@ describe("ffi", () => {
       // Verify the proof structure
       expect(result).toBeDefined();
       expect(result.proof).toBeDefined();
-      expect(result.public_signals).toBeDefined();
-      expect(Array.isArray(result.public_signals)).toBeTrue();
+      expect(result.publicSignals).toBeDefined();
+      expect(Array.isArray(result.publicSignals)).toBeTrue();
     });
   });
 });

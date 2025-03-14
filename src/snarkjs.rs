@@ -36,6 +36,7 @@ impl std::fmt::Display for SnarkjsPublicInputs {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct SnarkjsOutput {
     pub proof: SnarkjsGroth16Proof,
     pub public_signals: SnarkjsPublicInputs,

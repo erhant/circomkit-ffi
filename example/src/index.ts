@@ -1,8 +1,8 @@
 import { Circomkit } from "circomkit";
 import { downloadRelease, getLibPath, isBun } from "circomkit-ffi";
-import { CircomkitFFIBun } from "circomkit-ffi/bun";
-// import { CircomkitFFINode } from "circomkit-ffi/node";
-// import { open, load, close } from "ffi-rs"; // used by CircomkitFFINode
+// import { CircomkitFFIBun } from "circomkit-ffi/bun";
+import { CircomkitFFINode } from "circomkit-ffi/node";
+import { open, load, close } from "ffi-rs"; // used by CircomkitFFINode
 import { existsSync } from "fs";
 import path from "path";
 import * as snarkjs from "snarkjs";
@@ -24,38 +24,40 @@ if (!existsSync(libPath)) {
 
 console.log("Using FFI library at", libPath, "for", isBun() ? "Bun" : "Node");
 
-for (const circomkitFFI of [new CircomkitFFIBun(libPath) /* new CircomkitFFINode(libPath, open, close, load) */]) {
+for (const circomkitFFI of [
+  // with bun:
+  // new CircomkitFFIBun(libPath),
+  // with node:
+  new CircomkitFFINode(libPath, open, close, load),
+]) {
   // echo test to fail early
-  const echoMe = "Hello, world!";
-  const echoResult = circomkitFFI.echo(echoMe);
-  // FIXME: the lengths here differ due to encodings between Bun and Node
-  // console.log({
-  //   len1: echoMe.length,
-  //   len2: echoResult.length,
-  // });
-  if (echoResult !== echoMe) {
-    throw new Error(`Echo test failed: ${echoMe} != ${echoResult}`);
+  {
+    const echoMe = "Hello, world!";
+    const echoResult = circomkitFFI.echo(echoMe);
+    if (echoResult !== echoMe) {
+      throw new Error(`Echo test failed: ${echoMe} != ${echoResult}`);
+    }
   }
 
   // warm-ups
-  const warmupN = 3;
-  console.info("Warm-up iteration...");
   {
-    const circuitName = `multiplier_${warmupN}`;
+    console.info("Doing warm-up iterations...");
+    const warmUpCircuit = "multiplier_3";
+    const warmupInput = "default";
     circomkitFFI.arkworks_prove(
-      circomkit.path.ofCircuitWithInput(circuitName, "default", "wtns"),
-      circomkit.path.ofCircuit(circuitName, "r1cs"),
-      circomkit.path.ofCircuit(circuitName, "pkey")
+      circomkit.path.ofCircuitWithInput(warmUpCircuit, warmupInput, "wtns"),
+      circomkit.path.ofCircuit(warmUpCircuit, "r1cs"),
+      circomkit.path.ofCircuit(warmUpCircuit, "pkey")
     );
     await snarkjs.groth16.prove(
-      circomkit.path.ofCircuit(circuitName, "pkey"),
-      circomkit.path.ofCircuitWithInput(circuitName, "default", "wtns"),
+      circomkit.path.ofCircuit(warmUpCircuit, "pkey"),
+      circomkit.path.ofCircuitWithInput(warmUpCircuit, warmupInput, "wtns"),
       undefined,
       { singleThread: true }
     );
   }
 
-  for (const N of [3, 30, 300, 3000, 30000, 300000]) {
+  for (const N of [3, 30, 300 /* 3000, 30000, 300000 */]) {
     const IN = Array.from({ length: N }, (_, i) => i + 1);
     const circuitName = `multiplier_${N}`;
     const inputName = "default";
@@ -79,13 +81,13 @@ for (const circomkitFFI of [new CircomkitFFIBun(libPath) /* new CircomkitFFINode
     }
 
     console.info(`\nProving for multiplier_${N}`);
+    const NUM_ITERS = 5; // this many iters each
 
     // Arkworks benchmarking
     {
-      const iterations = 5;
       const times: number[] = [];
 
-      for (let i = 0; i < iterations; i++) {
+      for (let i = 0; i < NUM_ITERS; i++) {
         const start = performance.now();
         circomkitFFI.arkworks_prove(
           circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
@@ -96,29 +98,28 @@ for (const circomkitFFI of [new CircomkitFFIBun(libPath) /* new CircomkitFFINode
         times.push(end - start);
       }
 
-      const average = times.reduce((a, b) => a + b, 0) / iterations;
-      console.info(`Arkworks average time (${iterations} runs): ${average.toFixed(2)}ms`);
+      const average = times.reduce((a, b) => a + b, 0) / NUM_ITERS;
+      console.info(`Arkworks average time (${NUM_ITERS} runs): ${average.toFixed(2)}ms`);
     }
 
     // SnarkJS benchmarking
     {
-      const iterations = 5;
       const times: number[] = [];
 
-      for (let i = 0; i < iterations; i++) {
+      for (let i = 0; i < NUM_ITERS; i++) {
         const start = performance.now();
         await snarkjs.groth16.prove(
           circomkit.path.ofCircuit(circuitName, "pkey"),
           circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
           undefined,
-          { singleThread: true }
+          isBun() ? { singleThread: true } : undefined
         );
         const end = performance.now();
         times.push(end - start);
       }
 
-      const average = times.reduce((a, b) => a + b, 0) / iterations;
-      console.info(`SnarkJS average time (${iterations} runs): ${average.toFixed(2)}ms`);
+      const average = times.reduce((a, b) => a + b, 0) / NUM_ITERS;
+      console.info(`SnarkJS average time (${NUM_ITERS} runs): ${average.toFixed(2)}ms`);
     }
   }
 }

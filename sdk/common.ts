@@ -94,5 +94,5 @@ export async function downloadRelease(dir: string): Promise<string> {
 export function isBun(): boolean {
   // ignore is required as `Bun` is not defined in Node
   // @ts-ignore
-  return typeof Bun !== "undefined";
+  return typeof Bun !== typeof undefined;
 }

@@ -79,15 +79,44 @@ if (!existsSync(libPath)) {
 
 ### Preparing Node SDK
 
-<!-- // TODO: !!! -->
+The Node SDK is exported from `/node` path, and requires `ffi-rs` as a peer dependency.
+
+```ts
+import { CircomkitFFINode } from "circomkit-ffi/node";
+import { open, load, close } from "ffi-rs";
+
+// assume library exists at path `libPath`
+const lib = new CircomkitFFINode(libPath, open, close, load);
+```
 
 ### Preparing Bun SDK
 
-<!-- // TODO: !!! -->
+The Bun SDK is exported from `/bun` path, and works only for Bun runtime; trying to import this within Node runtime will cause an error.
+
+```ts
+import { CircomkitFFIBun } from "circomkit-ffi/bun";
+
+// assume library exists at path `libPath`
+const lib = new CircomkitFFIBun(libPath);
+```
 
 ### Using the SDK
 
-<!-- // TODO: !!! -->
+We are all set! We now have access to all the functions within our static library. For example, we can call `arkworks_prove` to generate a proof using Arkworks. We just have to provide the necessary paths to R1CS, witness file and the prover key.
+
+We can use a Circomkit instance to get these paths, but they can be manually written as well:
+
+```ts
+const { proof, publicSignals } = circomkitFFI.arkworks_prove(
+  circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
+  circomkit.path.ofCircuit(circuitName, "r1cs"),
+  circomkit.path.ofCircuit(circuitName, "pkey")
+);
+```
+
+> [!TIP]
+>
+> If for any reason you have to know whether you are in Bun or Node, you can use the `isBun` function exported by our SDK.
 
 ## Development
 
@@ -116,7 +145,7 @@ cargo test
 Before running tests:
 
 - you need to have installed [SnarkJS](https://github.com/iden3/snarkjs) globally, to verify that the FFI-generated proof is valid.
-- you need generated circuit files, which can be done with:
+- you need generated circuit files, which can be done with the command below.
 
 ```sh
 # preparations (do only once)
@@ -130,6 +159,10 @@ bunx circomkit prove $CIRCUIT default
 bunx circomkit json wtns $CIRCUIT default
 bunx circomkit json r1cs $CIRCUIT
 ```
+
+> [!TIP]
+>
+> You can take the library directly from within `/target/debug/libcircomkit_ffi.<your-extension>` and use with the SDK, for easier debugging with the SDK tests.
 
 ### SDK
 
@@ -153,6 +186,10 @@ bun run build.ts
 
 Note that we only export ESM modules, we do not have CommonJS support.
 
+## Example
+
+See the [`example`](./example/) folder.
+
 ## Benchmarks
 
 See the [`bench`](./bench/) folder.
@@ -168,3 +205,7 @@ Some helpful resources for this project on FFI usage were:
 - <https://bun.sh/docs/api/ffi>
 - <https://github.com/node-ffi/node-ffi/wiki/Node-FFI-Tutorial>
 - <https://tokio.rs/tokio/topics/bridging>
+
+## License
+
+This project is [MIT](./LICENSE) licensed.

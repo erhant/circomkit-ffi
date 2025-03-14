@@ -6,6 +6,8 @@ import {
 } from "ffi-rs";
 
 import type { ProofWithPublicSignals, ProverBackend } from "./interface";
+import { existsSync } from "fs";
+import { isBun } from "./common";
 
 const DataTypeString = 0 satisfies DataType.String;
 
@@ -30,10 +32,14 @@ const DataTypeString = 0 satisfies DataType.String;
 export class CircomkitFFINode implements ProverBackend {
   ffiName: string = "ffi-rs";
 
+  /** Library name used by `ffi-rs`. */
   readonly LIBRARY_NAME = "libcircomkit_ffi";
 
   /** Whether the `lib` is open. */
   isOpen = false;
+
+  /** Whether the environment is Bun, required for encoding correctly. */
+  private readonly isBun = isBun();
 
   constructor(
     /** Path to the library. */
@@ -44,7 +50,12 @@ export class CircomkitFFINode implements ProverBackend {
     readonly close: typeof ffiClose,
     /** The `load` function from `ffi-rs`. */
     readonly load: typeof ffiLoad
-  ) {}
+  ) {
+    // ensure path exists
+    if (!existsSync(path)) {
+      throw new Error(`No library exists at ${path}.`);
+    }
+  }
 
   echo(input: string): string {
     this.openIfClosed();
@@ -53,11 +64,11 @@ export class CircomkitFFINode implements ProverBackend {
       funcName: "echo",
       paramsType: [DataTypeString],
       retType: DataTypeString,
-      paramsValue: [Buffer.from(input).toString("utf8")],
+      paramsValue: [input].map(this.mapInput),
     });
     this.closeIfOpen();
 
-    return this.decodeResult(result);
+    return result;
   }
 
   arkworks_prove(
@@ -71,9 +82,7 @@ export class CircomkitFFINode implements ProverBackend {
       funcName: "arkworks_prove",
       paramsType: [DataTypeString, DataTypeString, DataTypeString],
       retType: DataTypeString,
-      paramsValue: [wtnsPath, r1csPath, pkeyPath].map((x) =>
-        Buffer.from(x, "utf16le").toString("utf8")
-      ),
+      paramsValue: [wtnsPath, r1csPath, pkeyPath].map(this.mapInput),
     });
     this.closeIfOpen();
 
@@ -95,9 +104,7 @@ export class CircomkitFFINode implements ProverBackend {
       funcName: "lambdaworks_prove",
       paramsType: [DataTypeString, DataTypeString],
       retType: DataTypeString,
-      paramsValue: [wtnsPath, r1csPath].map((x) =>
-        Buffer.from(x, "utf16le").toString("utf8")
-      ),
+      paramsValue: [wtnsPath, r1csPath].map(this.mapInput),
     });
     this.closeIfOpen();
 
@@ -123,13 +130,9 @@ export class CircomkitFFINode implements ProverBackend {
     }
   }
 
-  /** `ffi-rs` returns the strings as null-terminated (`\u0000`) UTF16
-   * strings, so we need to convert them to UTF8 strings.
-   */
-  private decodeResult(result: string): string {
-    return Buffer.from(result, "utf16le")
-      .toString("utf8")
-      .replace(/\u0000$/g, "");
+  /** With respect to runtime, encodes the input correctly. */
+  private mapInput(input: string): string {
+    return isBun() ? Buffer.from(input, "utf16le").toString("utf8") : input;
   }
 
   // additional safety measure

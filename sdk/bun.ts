@@ -1,6 +1,7 @@
 import { dlopen, FFIType } from "bun:ffi";
 import type { ProofWithPublicSignals, ProverBackend } from "./interface";
 import { isBun } from "./common";
+import { existsSync } from "fs";
 
 /**
  * A prover backend for Bun environments.
@@ -19,6 +20,11 @@ export class CircomkitFFIBun implements ProverBackend {
     // ensure that Bun is the current environment
     if (!isBun()) {
       throw new Error("This is not a Bun environment!");
+    }
+
+    // ensure path exists
+    if (!existsSync(path)) {
+      throw new Error(`No library exists at ${path}.`);
     }
   }
 
@@ -55,6 +61,7 @@ export class CircomkitFFIBun implements ProverBackend {
       new Uint8Array(Buffer.from(r1csPath + "\0", "utf8")),
       new Uint8Array(Buffer.from(pkeyPath + "\0", "utf8"))
     );
+
     return JSON.parse(result.toString());
   }
 
