@@ -15,9 +15,13 @@ We have 4 bars here:
 - **node**: using Node runtime for SnarkJS, with multi-threading
 - **node (ffi: arkworks)**: using Node runtime with `ffi-rs` to call Arkworks
 
-- The results show that using FFI does not help with performance w.r.t Node runtime, unless the circuit is very small (e.g. $\lt 3000$ constraints).
+The results show that using FFI does not help with performance w.r.t Node runtime, unless the circuit is very small (e.g. $\lt 3000$ constraints). Using Bun, it is always better to use the FFI library, notably because the SnarkJS prover in Bun works in a single thread, unlike its NodeJS counter-part that runs multi-threaded. Using FFI saves some time there, at the scale of x2 as the circuit size grows.
 
-- Using Bun, it is always better to use the FFI library, notably because the SnarkJS prover in Bun works in a single thread, unlike its NodeJS counter-part that runs multi-threaded. Using FFI saves some time there, at the scale of x2 as the circuit size grows.
+In short, using FFI has a performance increase when using Bun, and moreover, this project shows the proof-of-concept to easily use out-of-TS prover backends using the interface that we have built for Arkworks.
+
+> [!NOTE]
+>
+> Lambdaworks prover is also added, but it does its own trusted setup & its proof is not compatible with SnarkJS yet.
 
 ## Settings
 
