@@ -10,14 +10,16 @@ uv run plot.py
 
 We have 4 bars here:
 
-- **Bun**: using Bun runtime for SnarkJS, multi-threading disabled due to [snarkjs#490](https://github.com/iden3/snarkjs/pull/490)
-- **bun:ffi**: using Bun runtime with `bun:ffi` to call Arkworks
-- **Node**: using Node runtime for SnarkJS, with multi-threading
-- **ffi-rs**: using Node runtime with `ffi-rs` to call Arkworks
+- **bun**: using Bun runtime for SnarkJS, multi-threading disabled due to [snarkjs#490](https://github.com/iden3/snarkjs/pull/490)
+- **bun (ffi: arkworks)**: using Bun runtime with `bun:ffi` to call Arkworks
+- **node**: using Node runtime for SnarkJS, with multi-threading
+- **node (ffi: arkworks)**: using Node runtime with `ffi-rs` to call Arkworks
 
-All benchmarks work over a computed raw witness file, and the proof is checked to be verified via SnarkJS as well.
+- The results show that using FFI does not help with performance w.r.t Node runtime, unless the circuit is very small (e.g. $\lt 3000$ constraints).
 
-## Raw Results
+- Using Bun, it is always better to use the FFI library, notably because the SnarkJS prover in Bun works in a single thread, unlike its NodeJS counter-part that runs multi-threaded. Using FFI saves some time there, at the scale of x2 as the circuit size grows.
+
+## Settings
 
 Benchmark settings:
 
@@ -26,6 +28,10 @@ Benchmark settings:
 - NodeJS v22.13.1
 - 1 warm-up with proof verification for sanity check
 - 5 iterations for each case, average reported
+
+All benchmarks work over a computed raw witness file, and the proof is checked to be verified via SnarkJS as well.
+
+## Raw Outputs
 
 The raw results for Bun runtime are shown below:
 

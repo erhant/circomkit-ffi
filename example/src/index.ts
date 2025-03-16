@@ -80,7 +80,7 @@ for (const circomkitFFI of [
     );
   }
 
-  for (const N of [3, 30 /* 300, 3000, 30000, 300000*/]) {
+  for (const N of [3, 30, 300, 3000, 30000, 300000, 600000]) {
     const IN = Array.from({ length: N }, (_, i) => i + 1);
     const circuitName = `multiplier_${N}`;
     const inputName = "default";
