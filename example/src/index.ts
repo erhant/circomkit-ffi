@@ -1,12 +1,16 @@
-import { Circomkit } from "circomkit";
-import { downloadRelease, getLibPath, isBun } from "circomkit-ffi";
-// import { CircomkitFFIBun } from "circomkit-ffi/bun";
-import { CircomkitFFINode } from "circomkit-ffi/node";
-import { open, load, close } from "ffi-rs"; // used by CircomkitFFINode
 import { existsSync, readFileSync } from "fs";
 import path from "path";
-import * as snarkjs from "snarkjs";
 import { fileURLToPath } from "url";
+import { Circomkit } from "circomkit";
+import * as snarkjs from "snarkjs";
+import { downloadRelease, getLibPath, isBun } from "circomkit-ffi";
+
+/* using Bun */
+// import { CircomkitFFIBun } from "circomkit-ffi/bun";
+
+/* using Node */
+import { CircomkitFFINode } from "circomkit-ffi/node";
+import { open, load, close } from "ffi-rs"; // used by CircomkitFFINode
 
 // set this to `true` if you would like to build the circuits as well
 const BUILD_CIRCUIT = false;
@@ -76,7 +80,7 @@ for (const circomkitFFI of [
     );
   }
 
-  for (const N of [3, 30, 300, 3000, 30000, 300000]) {
+  for (const N of [3, 30 /* 300, 3000, 30000, 300000*/]) {
     const IN = Array.from({ length: N }, (_, i) => i + 1);
     const circuitName = `multiplier_${N}`;
     const inputName = "default";
