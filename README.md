@@ -36,6 +36,7 @@ The libraries are kept under this repository's releases, and supports the follow
 - Linux arm64
 - MacOS Intel (amd64)
 - MacoS Apple Silicon (arm64)
+- Windows x86_64 (amd64)
 
 ## Usage
 
