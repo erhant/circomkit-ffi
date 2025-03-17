@@ -4,6 +4,7 @@ await Bun.$`rm -rf dist`;
 import type { BunPlugin } from "bun";
 import { isolatedDeclaration } from "oxc-transform";
 
+/** plugin to generate types */
 function getDtsBunPlugin(): BunPlugin {
   const wroteTrack = new Set<string>();
   return {

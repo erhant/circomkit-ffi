@@ -46,14 +46,14 @@ jobs:
               releasename: "libcircomkit_ffi",
             }
           # ignore windows for a while...
-          # - {
-          #     runner: windows-latest,
-          #     osname: windows,
-          #     arch: amd64,
-          #     target: x86_64-pc-windows-msvc,
-          #     extension: "dll",
-          #     releasename: "circomkit_ffi",
-          #   }
+          - {
+              runner: windows-latest,
+              osname: windows,
+              arch: amd64,
+              target: x86_64-pc-windows-msvc,
+              extension: "dll",
+              releasename: "circomkit_ffi",
+            }
 
     name: Release - ${{ matrix.osname }}
 

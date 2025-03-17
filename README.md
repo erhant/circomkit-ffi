@@ -30,14 +30,12 @@ The FFI libraries are exposed through an SDK, which is published on NPM.
 npm install circomkit-ffi
 ```
 
-The libraries are kept under this repository's releases. It supports the following platforms & architectures:
+The libraries are kept under this repository's releases, and supports the following platforms & architectures:
 
 - Linux amd64
 - Linux arm64
 - MacOS Intel (amd64)
 - MacoS Apple Silicon (arm64)
-
-The library will be automatically downloaded when required by the SDK.
 
 ## Usage
 
@@ -107,7 +105,7 @@ We are all set! We now have access to all the functions within our static librar
 We can use a Circomkit instance to get these paths, but they can be manually written as well:
 
 ```ts
-const { proof, publicSignals } = circomkitFFI.arkworks_prove(
+const { proof, publicSignals } = lib.arkworks_prove(
   circomkit.path.ofCircuitWithInput(circuitName, inputName, "wtns"),
   circomkit.path.ofCircuit(circuitName, "r1cs"),
   circomkit.path.ofCircuit(circuitName, "pkey")
@@ -126,8 +124,6 @@ Clone the repository:
 git clone https://github.com/erhant/circomkit-ffi
 ```
 
-Note that Arkworks requires a Tokio runtime, even if nothing has to be `await`ed.
-
 ### Library
 
 The library called by FFI is written in Rust. You can build the library (for your own machine) using:
@@ -145,7 +141,7 @@ cargo test
 Before running tests:
 
 - you need to have installed [SnarkJS](https://github.com/iden3/snarkjs) globally, to verify that the FFI-generated proof is valid.
-- you need generated circuit files, which can be done with the command below.
+- you need generated circuit files, which can be done using the commands below.
 
 ```sh
 # preparations (do only once)
