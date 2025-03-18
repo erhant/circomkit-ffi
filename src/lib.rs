@@ -5,6 +5,8 @@ pub mod snarkjs;
 
 /// [Arkworks](https://github.com/arkworks-rs/circom-compat)
 pub mod arkworks;
+/// [ICICLE](https://github.com/ingonyama-zk/icicle-snark/)
+pub mod icicle;
 /// [Lambdaworks](https://github.com/lambdaclass/lambdaworks)
 pub mod lambdaworks;
 
