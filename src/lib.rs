@@ -5,8 +5,11 @@ pub mod snarkjs;
 
 /// [Arkworks](https://github.com/arkworks-rs/circom-compat)
 pub mod arkworks;
+
 /// [ICICLE](https://github.com/ingonyama-zk/icicle-snark/)
+#[cfg(feature = "icicle")]
 pub mod icicle;
+
 /// [Lambdaworks](https://github.com/lambdaclass/lambdaworks)
 pub mod lambdaworks;
 
@@ -94,6 +97,7 @@ pub extern "C" fn lambdaworks_prove(
 /// Generate an ICICLE proof from a given witness, R1CS, and a device type.
 ///
 /// The device type can be one of: `CPU`, `CUDA`, `METAL`.
+#[cfg(feature = "icicle")]
 #[no_mangle]
 #[allow(improper_ctypes_definitions)]
 pub extern "C" fn icicle_prove(

@@ -13,6 +13,7 @@ crate-type = ["cdylib"]
 # only enable the witness-gen feature for witness generation functionality
 # which is not working yet, and breaks tests as well due to build-level stuff
 witness-gen = ["paste", "rust-witness", "witnesscalc-adapter"]
+icicle = ["icicle-snark"]
 
 [dependencies]
 # lambdaworks
@@ -44,7 +45,7 @@ ark-relations = { version = "0.5.0", default-features = false }
 ark-serialize = { version = "0.5.0", default-features = false }
 
 # ingonyama icicle
-icicle-snark = { git = "https://github.com/erhant/icicle-snark", branch = "ffi" }
+icicle-snark = { git = "https://github.com/erhant/icicle-snark", branch = "ffi", optional = true }
 
 # witness generation stuff
 paste = { version = "1.0.15", optional = true }

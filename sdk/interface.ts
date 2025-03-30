@@ -49,6 +49,7 @@ export interface ProverBackend {
    * @param zkeyPath proving key file path (`.zkey`)
    * @param device device to be used for proving
    * @returns SnarkJS Groth16 proof & public signals
+   * @deprecated **DO NOT USE UNTIL ICICLE IS FIXED**
    */
   icicle_prove(
     wtnsPath: string,

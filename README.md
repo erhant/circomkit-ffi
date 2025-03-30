@@ -23,10 +23,14 @@
 This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. It features prover backends via:
 
 - [Arkworks](https://github.com/arkworks-rs/circom-compat) Circom adapter for **Groth16** over **BN254**.
-- [Ingonyama ICICLE](https://github.com/ingonyama-zk/icicle-snark) for **Groth16** over **BN254**.
 - [Lambdaworks](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter) Circom adapter for **Groth16** over **BLS12-381**
+- [Ingonyama ICICLE](https://github.com/ingonyama-zk/icicle-snark) for **Groth16** over **BN254** (via `icicle` feature).
 
 It also provides [SnarkJS](https://github.com/iden3/snarkjs) exports for both prover backends, to export proof objects and public signals.
+
+> [!NOTE]
+>
+> ICICLE is feature-gated because it requires a bit harder build process, and is in a very early stage of development.
 
 ## Installation
 
