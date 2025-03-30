@@ -20,7 +20,13 @@
   </a>
 </p>
 
-This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. It features prover backends via [Lambdaworks](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter) Circom adapter for **Groth16** over **BLS12-381** and [Arkworks](https://github.com/arkworks-rs/circom-compat) Circom adapter for **Groth16** over **BN254**. It also provides [SnarkJS](https://github.com/iden3/snarkjs) exports for both prover backends, to export proof objects and public signals.
+This repository contains an all-in-one adapter for several backends, mainly to be used by existing Javascript code via FFI. It features prover backends via:
+
+- [Arkworks](https://github.com/arkworks-rs/circom-compat) Circom adapter for **Groth16** over **BN254**.
+- [Ingonyama ICICLE](https://github.com/ingonyama-zk/icicle-snark) for **Groth16** over **BN254**.
+- [Lambdaworks](https://github.com/lambdaclass/lambdaworks/tree/main/provers/groth16/circom-adapter) Circom adapter for **Groth16** over **BLS12-381**
+
+It also provides [SnarkJS](https://github.com/iden3/snarkjs) exports for both prover backends, to export proof objects and public signals.
 
 ## Installation
 

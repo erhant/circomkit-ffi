@@ -5,7 +5,11 @@ import {
   type load as ffiLoad,
 } from "ffi-rs";
 
-import type { ProofWithPublicSignals, ProverBackend } from "./interface";
+import type {
+  IcicleDevice,
+  ProofWithPublicSignals,
+  ProverBackend,
+} from "./interface";
 import { existsSync } from "fs";
 import { isBun } from "./common";
 
@@ -89,6 +93,24 @@ export class CircomkitFFINode implements ProverBackend {
     return JSON.parse(result);
   }
 
+  icicle_prove(
+    wtnsPath: string,
+    pkeyPath: string,
+    device: IcicleDevice
+  ): ProofWithPublicSignals {
+    this.openIfClosed();
+    const result = this.load({
+      library: this.LIBRARY_NAME,
+      funcName: "icicle_prove",
+      paramsType: [DataTypeString, DataTypeString, DataTypeString],
+      retType: DataTypeString,
+      paramsValue: [wtnsPath, pkeyPath, device].map(this.mapInput),
+    });
+    this.closeIfOpen();
+
+    return JSON.parse(result);
+  }
+
   lambdaworks_prove(
     wtnsPath: string,
     r1csPath: string
@@ -132,7 +154,7 @@ export class CircomkitFFINode implements ProverBackend {
 
   /** With respect to runtime, encodes the input correctly. */
   private mapInput(input: string): string {
-    return isBun() ? Buffer.from(input, "utf16le").toString("utf8") : input;
+    return this.isBun ? Buffer.from(input, "utf16le").toString("utf8") : input;
   }
 
   // additional safety measure

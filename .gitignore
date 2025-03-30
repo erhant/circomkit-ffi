@@ -180,3 +180,5 @@ dist
 *.dylib
 *.so
 *.dll
+
+precomputed_*

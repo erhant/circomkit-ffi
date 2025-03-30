@@ -1,6 +1,6 @@
 [package]
 name = "circomkit-ffi"
-version = "0.0.7"
+version = "0.0.8"
 edition = "2021"
 license = "MIT"
 authors = ["erhant"]
@@ -42,6 +42,9 @@ ark-poly = { version = "0.5.0", default-features = false, features = [
 ] }
 ark-relations = { version = "0.5.0", default-features = false }
 ark-serialize = { version = "0.5.0", default-features = false }
+
+# ingonyama icicle
+icicle-snark = { git = "https://github.com/erhant/icicle-snark", branch = "ffi" }
 
 # witness generation stuff
 paste = { version = "1.0.15", optional = true }
