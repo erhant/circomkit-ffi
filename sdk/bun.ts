@@ -1,5 +1,9 @@
 import { dlopen, FFIType } from "bun:ffi";
-import type { ProofWithPublicSignals, ProverBackend } from "./interface";
+import type {
+  IcicleDevice,
+  ProofWithPublicSignals,
+  ProverBackend,
+} from "./interface";
 import { isBun } from "./common";
 import { existsSync } from "fs";
 
@@ -62,6 +66,28 @@ export class CircomkitFFIBun implements ProverBackend {
       new Uint8Array(Buffer.from(pkeyPath + "\0", "utf8"))
     );
 
+    return JSON.parse(result.toString());
+  }
+
+  icicle_prove(
+    wtnsPath: string,
+    pkeyPath: string,
+    device: IcicleDevice
+  ): ProofWithPublicSignals {
+    const {
+      symbols: { icicle_prove },
+    } = dlopen(this.path, {
+      icicle_prove: {
+        args: [FFIType.cstring, FFIType.cstring, FFIType.cstring],
+        returns: FFIType.cstring,
+      },
+    });
+
+    const result = icicle_prove(
+      new Uint8Array(Buffer.from(wtnsPath + "\0", "utf8")),
+      new Uint8Array(Buffer.from(pkeyPath + "\0", "utf8")),
+      new Uint8Array(Buffer.from(device + "\0", "utf8"))
+    );
     return JSON.parse(result.toString());
   }
 

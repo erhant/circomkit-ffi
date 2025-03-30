@@ -90,3 +90,33 @@ pub extern "C" fn lambdaworks_prove(
         }
     }
 }
+
+/// Generate an ICICLE proof from a given witness, R1CS, and a device type.
+///
+/// The device type can be one of: `CPU`, `CUDA`, `METAL`.
+#[no_mangle]
+#[allow(improper_ctypes_definitions)]
+pub extern "C" fn icicle_prove(
+    wtns_path_ptr: *const c_char,
+    pkey_path_ptr: *const c_char,
+    device_ptr: *const c_char,
+) -> CString {
+    let [wtns_path, pkey_path, device] = [wtns_path_ptr, pkey_path_ptr, device_ptr].map(|ptr| {
+        unsafe {
+            assert!(!ptr.is_null());
+            CStr::from_ptr(ptr)
+        }
+        .to_str()
+        .unwrap()
+    });
+
+    match icicle::prove_with_existing_witness(wtns_path, pkey_path, device) {
+        Ok(snarkjs_out) => {
+            let output = serde_json::to_string_pretty(&snarkjs_out).unwrap();
+            CString::new(output).unwrap()
+        }
+        Err(e) => {
+            panic!("Error: {:?}", e);
+        }
+    }
+}
