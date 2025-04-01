@@ -205,7 +205,7 @@ See the [`bench`](./bench/) folder.
 
 This project is kindly supported by [Soulforge zkBankai](https://soulforge.zkbankai.com/) grant, with the application [here](https://github.com/zk-bankai/soulforge/blob/main/applications/circomkit-bunffi.md).
 
-You can find the presentation video [here](https://youtu.be/uJjhsrP15L0).
+You can find the presentation [here](./example/presentation.pdf) and its live video [here](https://youtu.be/uJjhsrP15L0).
 
 Some helpful resources for this project on FFI usage were:
 
