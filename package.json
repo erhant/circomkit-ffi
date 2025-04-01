@@ -1,14 +1,10 @@
 {
   "name": "circomkit-ffi",
-  "type": "module",
   "version": "0.0.12",
-  "license": "MIT",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist/",
-    "LICENSE",
-    "README.md"
-  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erhant/circomkit-ffi.git"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^22.13.5",
@@ -39,14 +35,15 @@
       "types": "./dist/node.d.ts"
     }
   },
-  "homepage": "https://github.com/erhant/circomkit-ffi/sdk#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/erhant/circomkit-ffi.git"
-  },
   "bugs": {
     "url": "https://github.com/erhant/circomkit-ffi/issues/"
   },
+  "files": [
+    "dist/",
+    "LICENSE",
+    "README.md"
+  ],
+  "homepage": "https://github.com/erhant/circomkit-ffi/sdk#readme",
   "keywords": [
     "snarkjs",
     "circom",
@@ -55,5 +52,8 @@
     "zk-snark",
     "rust",
     "ffi"
-  ]
+  ],
+  "license": "MIT",
+  "type": "module",
+  "types": "./dist/index.d.ts"
 }
