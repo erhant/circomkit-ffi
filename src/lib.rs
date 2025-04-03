@@ -13,7 +13,6 @@ pub mod icicle;
 /// [Lambdaworks](https://github.com/lambdaclass/lambdaworks)
 pub mod lambdaworks;
 
-mod traits;
 mod witness;
 
 /// Given a string input, returns the same.

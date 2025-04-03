@@ -74,7 +74,7 @@ pub fn parse_witness_to_elems<T>(
             }
             // skip any other section
             _ => {
-                pos = pos + section_length as usize;
+                pos += section_length as usize;
             }
         }
     }

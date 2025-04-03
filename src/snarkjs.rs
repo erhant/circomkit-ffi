@@ -90,10 +90,10 @@ pub fn check_snarkjs_output(
     prefix: &str,
 ) -> eyre::Result<()> {
     let proof_output_path = dir
-        .join(&format!("{}_{}_proof", prefix, circuit_name))
+        .join(format!("{}_{}_proof", prefix, circuit_name))
         .with_extension("json");
     let public_output_path = dir
-        .join(&format!("{}_{}_public", prefix, circuit_name))
+        .join(format!("{}_{}_public", prefix, circuit_name))
         .with_extension("json");
     let vkey_path = dir.join("groth16_vkey").with_extension("json");
 
