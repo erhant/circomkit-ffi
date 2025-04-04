@@ -2,7 +2,7 @@
   <h1 align="center">
     Circomkit FFI
   </h1>
-  <p align="center"><i>Rust-based static libraries for alternative provers.</i></p>
+  <p align="center"><i>Rust-based shared library for alternative provers.</i></p>
 </p>
 
 <p align="center">
@@ -111,7 +111,7 @@ const lib = new CircomkitFFIBun(libPath);
 
 ### Using the SDK
 
-We are all set! We now have access to all the functions within our static library. For example, we can call `arkworks_prove` to generate a proof using Arkworks. We just have to provide the necessary paths to R1CS, witness file and the prover key.
+We are all set! We now have access to all the functions within our shared library. For example, we can call `arkworks_prove` to generate a proof using Arkworks. We just have to provide the necessary paths to R1CS, witness file and the prover key.
 
 We can use a Circomkit instance to get these paths, but they can be manually written as well:
 
